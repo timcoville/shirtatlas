@@ -3,4 +3,4 @@ from models import *
 
 def index(request):
 
-    return HttpResponse("Hello World")
+    return HttpResponse("Hello World!")
