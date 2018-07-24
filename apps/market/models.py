@@ -111,6 +111,8 @@ class Design(models.Model):
         CharField(max_length=15),
         size = 3
     )
+    sex = models.CharField(max_length=15)
+    age = models.CharField(max_length=15)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     designer = models.ForeignKey(User, related_name="designer_uploads")
