@@ -80,10 +80,8 @@ class UserManager(models.Manager):
         return { }
 
 class User(models.Model):   
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    username = models.CharField(max_length=30)
-    street = models.CharField(max_length=100)
+    name = models.CharField(max_length=50)
+    address = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=2)
     zip_code = models.CharField(max_length=5)
@@ -111,8 +109,10 @@ class Design(models.Model):
         CharField(max_length=15),
         size = 3
     )
-    sex = models.CharField(max_length=15)
-    age = models.CharField(max_length=15)
+    sex = ArrayField(
+        CharField(max_length=15),
+        size = 3
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     designer = models.ForeignKey(User, related_name="designer_uploads")
