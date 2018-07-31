@@ -15,34 +15,35 @@ class UserManager(models.Manager):
     def create_user(self, postData):
         # Validations
         errors = []
-        if len(postData['first_name']) < 3:
-            errors.append("First name must be 3 or more characters")
-        if len(postData['last_name']) < 3:
-            errors.append("Last name must be 3 or more characters")
-        if len(postData['username']) < 3:
-            errors.append("Username must be 3 or more characters")
+        if len(postData['name']) < 5:
+            errors.append("Name must be 5 or more characters")
         if len(postData['password']) < 8:
             errors.append("Password must be 8 or more characters")
         if postData['password'] != postData['c_password']:
             errors.append("Passwords do not match")
-        
         if not EMAIL_REGEX.match(postData['email']):
             errors.append("Email is not valid, please try again")
         if len(User.objects.filter(email = postData['email'])):
             errors.append("Email is already registered")
-        if len(User.objects.filter(username = postData['username'])):
-            errors.append("Username is already registered")    
+        if len(postData['address']) == 0:
+            errors.append("Address is required")
+        if len(postData['city']) == 0:
+            errors.append("City is required")
+        if postData['state'] == 'Choose...':
+            errors.append("State is required")
+        if len(postData['zip_code']) == 0:
+            errors.append("Zipcode is required")
+        if len(postData['zip_code']) != 0 and len(postData['zip_code']) !=5:
+            errors.append("Valid zipcode is required")    
         if len(errors) > 0:
             return { "errors" : errors }
         #Hash
         pw = bcrypt.hashpw(postData['password'].encode(), bcrypt.gensalt())
         #Creating Record
         the_user = User.objects.create(
-            first_name=postData['first_name'],
-            last_name=postData['last_name'],
-            username=postData['username'],
+            name=postData['name'],
+            address=postData['address'],
             email=postData['email'],
-            street=postData['street'],
             city=postData['city'],
             state=postData['state'],
             zip_code=postData['zip_code'],
@@ -86,7 +87,7 @@ class User(models.Model):
     state = models.CharField(max_length=2)
     zip_code = models.CharField(max_length=5)
     email = models.CharField(max_length=30)
-    password = models.CharField(max_length=30)
+    password = models.CharField(max_length=100)
     designer = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
