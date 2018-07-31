@@ -39,15 +39,16 @@
                     
                     {% if 'user_id' in request.session %}
                     <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              My Account
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                              <a class="dropdown-item" href="#">Action</a>
-                              <a class="dropdown-item" href="#">Another action</a>
-                              <div class="dropdown-divider"></div>
-                              <a class="dropdown-item" href="/logout">Logout</a>
-                            </div>
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            My Account
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% if 'designer' in request.session %}<a class="dropdown-item" href="/new-design">Add Design</a>{% endif%}
+                            <a class="dropdown-item" href="/editprofile">Edit Account</a>
+                            <a class="dropdown-item" href="">View Orders</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
                     </li> 
                     {% else %}
                     <li class="nav-item">
@@ -71,16 +72,23 @@
         <hr>
           <div class="row justify-content-center">
             <div class="col-md-8">
-              <h3>Edit your Account</h3>
+              <h3>Edit your Account</h3> 
               <hr>
               {% if messages %}
-              <div class="alert alert-danger" role="alert">                
                 
+              
                 {% for message in messages %}
-                
-                  <p class="text-monospace small" style="margin-bottom:0px;">{{ forloop.counter }}) {{message}}. </p>
+                    {% if message.tags == "error" %}
+                        <div class="alert alert-danger" role="alert">
+                            <p class="text-monospace small" style="margin-bottom:0px;">{{ forloop.counter }}) {{message}} </p>
+                        </div>
+                    {% else %}
+                    <div class="alert alert-success" role="alert">
+                        <p class="text-monospace small" style="margin-bottom:0px;">{{message}} </p>
+                    </div>
+                    {% endif %}
                 {% endfor %}
-              </div>
+              
               <hr>
             {% endif %}
               <form action="/editprofile" method="post">
@@ -130,9 +138,12 @@
                       <input type="text" class="form-control" name="zip_code" id="inputZip" value="{{user.zip_code}}">
                     </div>
                   </div>
-    
+                  <input type="hidden" name="id" value="{{request.session.user_id}}">
                   <button type="submit" class="btn btn-primary">Update</button>
                 </form>
+                <hr>
+                <a href="/editpassword"><button type="button" class="btn btn-secondary btn-sm">Update Password</button></a>
+                
 
             
             </div>

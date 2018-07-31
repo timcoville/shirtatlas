@@ -6,5 +6,6 @@ urlpatterns = [
     url(r'^register$', views.register),
     url(r'^login$', views.login),
     url(r'^logout$', views.logout),
-    url(r'^editprofile/(?P<id>\d+)$', views.editprofile),
+    url(r'^editprofile$', views.editprofile),
+    url(r'^editpassword$', views.editpassword)
 ]

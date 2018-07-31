@@ -37,13 +37,33 @@ def login(request):
             request.session['designer'] = True
         return redirect('/')
 
-def editprofile(request, id):
+def editprofile(request):
     if not 'user_id' in request.session:
         return redirect('/')
     if request.method != 'POST':
-        context = {"user": User.objects.get(id = id)}
+        context = {"user": User.objects.get(id = request.session['user_id'])}
         return render(request, "market/edit.html", context)
-    
+    result = User.objects.update_profile(request.POST)
+    if "errors" in result:
+        for error in result['errors']:
+            messages.error(request, error)
+        return redirect('/editprofile')
+    messages.success(request, "Profile Updateded Successfully")
+    return redirect('/editprofile')
+
+def editpassword(request):
+    if not 'user_id' in request.session:
+        return redirect('')
+    if request.method != 'POST':
+        return render(request, "market/password.html")
+    result = User.objects.update_password(request.POST)
+    if 'errors' in result:
+        for error in result['errors']:
+            messages.error(request, error)
+        return redirect('/editpassword')
+    messages.success(request, "Password Updated Successfully")
+    return redirect('/editprofile')
+
 
 def logout(request):
     request.session.clear()

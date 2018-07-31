@@ -62,6 +62,58 @@ class UserManager(models.Manager):
             return { "user" : the_user }
         return { "errors" : errors }
     
+    def update_password(self, postData):
+        the_user = User.objects.get(id = postData['id'])
+        if bcrypt.checkpw(postData['password'].encode(), the_user.password.encode()):    
+            errors = []
+            if len(postData['new_password']) < 8:
+                errors.append("Password must be 8 or more characters")
+            if postData['new_password'] != postData['c_password']:
+                errors.append("New password does not match")
+            if bcrypt.checkpw(postData['new_password'].encode(), the_user.password.encode()):   
+                errors.append("New password cannot be the same as your current password") 
+            if len(errors) > 0:
+                return {"errors":errors}
+            pw = bcrypt.hashpw(postData['new_password'].encode(), bcrypt.gensalt())
+            the_user.password = pw
+            the_user.save()
+            return {"user": the_user}
+        else:
+            return {"errors": ["Current Password is not correct"]}
+
+    def update_profile(self, postData):
+        errors = []
+        the_user = User.objects.get(id = postData['id'])
+        if len(postData['name']) < 5:
+            errors.append("Name must be 5 or more characters")
+        if not EMAIL_REGEX.match(postData['email']):
+            errors.append("Email is not valid, please try again")
+        if len(User.objects.filter(email = postData['email'])) and the_user.email != postData['email']:
+            errors.append("Email is already registered")
+        if len(postData['address']) == 0:
+            errors.append("Address is required")
+        if len(postData['city']) == 0:
+            errors.append("City is required")
+        if postData['state'] == 'Choose...':
+            errors.append("State is required")
+        if len(postData['zip_code']) == 0:
+            errors.append("Zipcode is required")
+        if len(postData['zip_code']) != 0 and len(postData['zip_code']) !=5:
+            errors.append("Valid zipcode is required")    
+        if len(errors) > 0:
+            return { "errors" : errors }
+        
+        the_user.name = postData['name']
+        the_user.email = postData['email']
+        the_user.address = postData['address']
+        the_user.city = postData['city']
+        the_user.state = postData['state']
+        the_user.zip_code = postData['zip_code']
+        the_user.save()
+        return {"user": the_user}
+            
+
+    
     def upload_design(self, postData, userID):
         errors = []
         if len(postData['name']) == 0:
