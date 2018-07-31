@@ -78,7 +78,7 @@
                 
                 {% for message in messages %}
                 
-                  <span class="text-monospace small block">{{message}}. </span>
+                  <p class="text-monospace small" style="margin-bottom:0px;">{{ forloop.counter }}) {{message}}. </p>
                 {% endfor %}
               </div>
               <hr>

@@ -17,7 +17,10 @@ def register(request):
         return redirect ('/register')
     if 'user' in result:
         request.session['user_id'] = result['user'].id
-        return redirect('/index')
+        if result['user'].designer == True:
+            print("works")
+            request.session['designer'] = "true"
+        return redirect('/')
     
 def login(request):
     if request.method != 'POST':
@@ -29,6 +32,9 @@ def login(request):
         return redirect ('/login')
     if 'user' in result:
         request.session['user_id'] = result['user'].id
+        if result['user'].designer == True:
+            print("works")
+            request.session['designer'] = True
         return redirect('/')
 
 def logout(request):
