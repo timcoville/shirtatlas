@@ -37,6 +37,14 @@ def login(request):
             request.session['designer'] = True
         return redirect('/')
 
+def editprofile(request, id):
+    if not 'user_id' in request.session:
+        return redirect('/')
+    if request.method != 'POST':
+        context = {"user": User.objects.get(id = id)}
+        return render(request, "market/edit.html", context)
+    
+
 def logout(request):
     request.session.clear()
     return redirect('/')
