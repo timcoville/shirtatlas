@@ -5,10 +5,16 @@ from datetime import datetime
 from django.db.models import CharField, Model, BooleanField, DecimalField
 from django.contrib.postgres.fields import ArrayField
 
+    
+
+
+
 import bcrypt
 import re
 
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
+
+
 
 
 class UserManager(models.Manager):
@@ -113,22 +119,30 @@ class UserManager(models.Manager):
         return {"user": the_user}
             
 
-    
-    def upload_design(self, postData, userID):
+class DesignManager(models.Manager):
+    def upload_design(self, postData, postFiles):
         errors = []
         if len(postData['name']) == 0:
-            errors.append("Shirt design requires a name!")
+            errors.append("Shirt design requires a name")
         if len(postData['desc']) < 3:
-            errors.append("Shirt requires a description greater than 3 characters!")
+            errors.append("Shirt requires a description greater than 3 characters")
         if len(Design.objects.filter(name__iexact = postData['name'])):
-            errors.append("This name already exists, try a variation of your name!")
-        if postData['image'] == "null":
-            errors.append("Image of shirt design required!")
+            errors.append("This name already exists, try a variation")
+        if "category" not in postData:
+            errors.append("Category required")
+        if "category" in postData:
+            if len(postData['category']) > 3:
+                errors.append("Only 3 categories allowed")
+        if len(postData['design_file']) == 0:
+            errors.append("Image of shirt design required!")    
+        if len(postData['design_file']) != 0:
+            if ".png" not in postData['design_file'] or ".jpg" not in postData['design_file']:
+                errors.append('Design must be a valid format (.png or .jpg)')
+        if postData['price'] < 5:
+            errors.append('Price must be greater than $5')
         if len(errors) > 0:
             return { "errors" : errors }
-        #Design.objects.create(name=postData['design_name'], uploader=User.objects.get(id=userID))
         
-        #user = User.objects.get(id=userID)
         
         return { }
 
@@ -150,26 +164,16 @@ class Design(models.Model):
     desc = models.TextField(null=True)
     image = models.FileField(null=False)
     price = models.DecimalField(max_digits=5, decimal_places=2, default=20.00)
-    color_availability = ArrayField(
-        CharField(max_length=20),
-        size = 3
-    )
-    design_colors = ArrayField(
-        CharField(max_length=20),
-        size = 3
-    )
+
     categories = ArrayField(
         CharField(max_length=15),
         size = 3
     )
-    sex = ArrayField(
-        CharField(max_length=15),
-        size = 3
-    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     designer = models.ForeignKey(User, related_name="designer_uploads")
-    objects = UserManager()
+    objects = DesignManager()
 
 class Spec(models.Model):
     color = models.CharField(max_length=20)

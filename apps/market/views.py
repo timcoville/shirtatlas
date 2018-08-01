@@ -2,8 +2,14 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib import messages
 from models import *
 
+
 def index(request):
+    query = request.GET.get('name')
+    print(query)
     return render(request, "market/index.html")
+
+def test(request):
+    return render(request, "market/designs.html")
 
 def register(request):
     if request.method != 'POST':
@@ -70,7 +76,11 @@ def newdesign(request):
     if request.method != 'POST':
         return render(request, "market/newdesign.html")
     print(request.POST)
-    print (request.POST['design_file'])
+    result = Design.objects.upload_design(request.POST, request.FILES)
+    if 'errors' in result:
+        for error in result['errors']:
+            messages.error(request, error)
+        return redirect('/newdesign')
     return redirect('/newdesign')
 
 def logout(request):

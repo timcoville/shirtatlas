@@ -25,7 +25,7 @@
                   <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                  <ul class="navbar-nav">
+                  <ul class="navbar-nav justify-content-end">
 
                     <li class="nav-item">
                       <a class="nav-link" href="/">Men</a>
@@ -82,8 +82,9 @@
                     </div>
                     <hr>
                 {% endif %}
-                <form action="/newdesign" method="post">
+                <form action="/newdesign" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
+                    <input type="hidden" value="{{request.session.user_id}}">
                     <div class="form-row">
                         <div class="form-group col-md-6">                      
                             <input type="text" class="form-control" id="inputName" name="name" placeholder="Design Name">
@@ -98,7 +99,36 @@
                         <input type="text" class="form-control" id="inputDesc" name="desc" placeholder="Design Description">
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-md-6">
+                            <div class="form-group col-md-6">
+                                    <label for="inputCategory">Categories</label>
+                                    <select multiple class="form-control" id="inputCategory" name="category">
+                                        <option>Tattoo</option>
+                                       
+                                        <option>Heraldry</option>
+                                        <option>Holiday</option>
+                                        
+                                        <option>Religious</option>
+                                        
+                                        <option>Sports</option>
+                                       
+                                        <option>Funny</option>
+                                        <option>Artistic</option>
+                                        <option>Comics</option>
+                                       
+                                        <option>Retro</option>
+                                        <option>Sci-Fi</option>
+                                       
+                                        <option>Anime</option>
+                                        <option>Animals</option>
+                                        <option>Patriotic</option>
+                                        <option>Cars</option>
+                  
+                                    </select>
+                                    <small id="inputCategory" class="form-text text-muted">
+                                            You can pick up to 3 categories.
+                                    </small>
+                                </div>
+      <!--                   <div class="form-group col-md-6">
                                 <label for="inputFontStyle">Font Style</label>
                                 <select class="form-control" id="inputFontStyle" name="font_style">
                                     <option>Fancy</option>
@@ -114,14 +144,14 @@
                                 <small id="inputFontStyle" class="form-text text-muted">
                                        Refer to <a href="https://www.dafont.com/" target="new">DaFont</a> for classifications.
                                 </small>
-                        </div>
+                        </div> -->
                         <div class="form-group col-md-6">
                             <label for="inputPrice">Price</label>
                             <input type="number" class="form-control" id="inputPrice" name="price" placeholder="9.99" step="0.01">
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-md-6">
+                       <!--  <div class="form-group col-md-6">
                             <label for="inputCategory">Categories</label>
                             <select multiple class="form-control" id="inputCategory" name="category">
                                 <option>Tattoo</option>
@@ -165,8 +195,8 @@
                             <small id="inputCategory" class="form-text text-muted">
                                     You can pick up to 3 categories.
                             </small>
-                        </div>
-                        <div class="form-group col-md-6">
+                        </div> -->
+<!--                         <div class="form-group col-md-6">
                                 <label for="inputColors">Colors</label>
                                 <select multiple class="form-control" id="inputColors">
                                   <option>Yellow</option>
@@ -183,7 +213,7 @@
                                 <small id="inputCategory" class="form-text text-muted">
                                         If your design has multiple colors, select up to 3.
                                 </small>
-                        </div>
+                        </div> -->
                     </div>
                   <button type="submit" class="btn btn-primary">Add</button>
                 </form>
