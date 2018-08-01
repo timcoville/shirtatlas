@@ -7,5 +7,6 @@ urlpatterns = [
     url(r'^login$', views.login),
     url(r'^logout$', views.logout),
     url(r'^editprofile$', views.editprofile),
-    url(r'^editpassword$', views.editpassword)
+    url(r'^editpassword$', views.editpassword),
+    url(r'^newdesign$', views.newdesign)
 ]

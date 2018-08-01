@@ -64,6 +64,14 @@ def editpassword(request):
     messages.success(request, "Password Updated Successfully")
     return redirect('/editprofile')
 
+def newdesign(request):
+    if not 'user_id' in request.session and not 'designer' in request.session:
+        return redirect('')
+    if request.method != 'POST':
+        return render(request, "market/newdesign.html")
+    print(request.POST)
+    print (request.POST['design_file'])
+    return redirect('/newdesign')
 
 def logout(request):
     request.session.clear()
