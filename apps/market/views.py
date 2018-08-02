@@ -84,10 +84,9 @@ def newdesign(request):
     print(result)
     design = result['design']
     print(design)
-    string = "/"
-    string += str(design.id)
-    print(string)
-    return redirect(string)
+    route = "/"
+    route += str(design.id)
+    return redirect(route)
 
 def design(request, id):
     context = {
