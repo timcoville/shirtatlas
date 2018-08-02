@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from datetime import datetime
-from django.db.models import CharField, Model, BooleanField, DecimalField
+from django.db.models import CharField, Model, BooleanField, DecimalField, IntegerField
 from django.contrib.postgres.fields import ArrayField
 
 import os    
@@ -10,7 +10,8 @@ import os
 
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = 'shirtatlas-static'
+AWS_STORAGE_BUCKET_NAME_STATIC = 'shirtatlas-static'
+AWS_STORAGE_BUCKET_NAME_MEDIA = 'shirtatlas-media'
 
 import bcrypt
 import re
@@ -128,12 +129,18 @@ class DesignManager(models.Manager):
     def upload_design(self, postData, postFiles):
         if "category" in postData:
             cats = postData.getlist('category')
-        
+        print(postFiles)
         try:
             image_name = postFiles['design_file'].name
             image_type = postFiles['design_file'].content_type
         except:
             image_name = ""
+        
+        try:
+            design_image = postFiles['design_image'].name
+            design_type = postFiles['design_image'].content_type
+        except:
+            design_image = ""
     
         errors = []
         if len(postData['name']) == 0:
@@ -148,17 +155,27 @@ class DesignManager(models.Manager):
             if len(cats) > 3:
                 errors.append("Only 3 categories allowed")
         if len(image_name) == 0:
-            errors.append("Image of shirt design required!")    
+            errors.append("Design file required")    
         if len(image_name) != 0:
             if image_type != 'image/png' and image_type != 'image/jpg':
                 errors.append('Design must be a valid format (.png or .jpg)')
+        if len(design_image) == 0:
+            errors.append("Display image required")    
+        if len(design_image) != 0:
+            if design_type != 'image/png' and design_type != 'image/jpg':
+                errors.append('Design must be a valid format (.png or .jpg)')
         if postData['price'] < 5:
-            errors.append('Price must be greater than $5')
+            errors.append('Price must be greater than $4')
+        if postData['licenses'] < 1:
+            errors.append('Licenses must be greater than 0')
         if len(errors) > 0:
             return { "errors" : errors }
-        key = postData['user_id'] + image_name
-        print(key)
-        s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(Key=key, Body=postFiles['design_file'])
+
+        static_key = postData['user_id'] + "$%#" + design_image
+        media_key = postData['user_id'] + image_name
+
+        s3.Bucket(AWS_STORAGE_BUCKET_NAME_STATIC).put_object(Key=static_key, Body=postFiles['design_image'])
+        s3.Bucket(AWS_STORAGE_BUCKET_NAME_MEDIA).put_object(Key=media_key, Body=postFiles['design_file'])
         
         return { }
 
@@ -178,26 +195,19 @@ class User(models.Model):
 class Design(models.Model):
     name = models.CharField(max_length=30)
     desc = models.TextField(null=True)
-    image = models.FileField(null=False)
+    display_image = models.CharField(max_length=100)
+    design_file = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=5, decimal_places=2, default=20.00)
-
+    licenses = models.IntegerField(null=False)
     categories = ArrayField(
         CharField(max_length=15),
         size = 3
     )
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     designer = models.ForeignKey(User, related_name="designer_uploads")
     objects = DesignManager()
 
-class Spec(models.Model):
-    color = models.CharField(max_length=20)
-    size = models.CharField(max_length=3)
-    surcharge = models.DecimalField(max_digits=3, decimal_places=2)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    design = models.ForeignKey(Design, related_name="design_specs")
 
 class Order(models.Model):
     first_name = models.CharField(max_length=30)
@@ -210,5 +220,5 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     buyer = models.ForeignKey(User, related_name="user_purchases")
-    products = models.ManyToManyField(Spec, related_name="products_ordered")
+    products = models.ManyToManyField(Design, related_name="products_ordered")
     
