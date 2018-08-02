@@ -176,8 +176,19 @@ class DesignManager(models.Manager):
 
         s3.Bucket(AWS_STORAGE_BUCKET_NAME_STATIC).put_object(Key=static_key, Body=postFiles['design_image'])
         s3.Bucket(AWS_STORAGE_BUCKET_NAME_MEDIA).put_object(Key=media_key, Body=postFiles['design_file'])
+
+        the_design = Design.objects.create(
+            name = postData['name'],
+            desc = postData['desc'],
+            display_image = static_key,
+            design_file = media_key,
+            price = postData['price'],
+            licenses = postData['licenses'],
+            categories = cats,
+            designer = User.objects.get(id=postData['user_id'])
+        )
         
-        return { }
+        return {"design": the_design}
 
 class User(models.Model):   
     name = models.CharField(max_length=50)

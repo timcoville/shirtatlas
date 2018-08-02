@@ -83,6 +83,13 @@ def newdesign(request):
         return redirect('/newdesign')
     return redirect('/newdesign')
 
+def design(request, id):
+    context = {
+        'design': Design.objects.get(id=id)
+        }
+    return render(request, "market/design.html", context)
+    
+
 def logout(request):
     request.session.clear()
     return redirect('/')

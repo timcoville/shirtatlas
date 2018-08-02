@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'^editprofile$', views.editprofile),
     url(r'^editpassword$', views.editpassword),
     url(r'^newdesign$', views.newdesign),
-    url(r'^test$', views.test)
+    url(r'^test$', views.test),
+    url(r'^(?P<id>\d+)$', views.design)
 ]
