@@ -39,16 +39,19 @@
                     
                     {% if 'user_id' in request.session %}
                     <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          My Account
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          {% if 'designer' in request.session %}<a class="dropdown-item" href="/newdesign">Add Design</a>{% endif%}
-                          <a class="dropdown-item" href="/editprofile">Edit Account</a>
-                          <a class="dropdown-item" href="">View Orders</a>
-                          <div class="dropdown-divider"></div>
-                          <a class="dropdown-item" href="/logout">Logout</a>
-                      </div>
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                My Account
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                {% if 'designer' in request.session %}
+                                    <a class="dropdown-item" href="/newdesign">Add Design</a>
+                                    <a class="dropdown-item" href="/viewdesigns/{{request.session.user_id">Manage Designs</a>
+                                {% endif%}
+                                <a class="dropdown-item" href="/editprofile">Edit Account</a>
+                                <a class="dropdown-item" href="">View Orders</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="/logout">Logout</a>
+                            </div>
                     </li> 
                     {% else %}
                     <li class="nav-item">

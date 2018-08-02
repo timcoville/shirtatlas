@@ -93,10 +93,31 @@ def design(request, id):
         'design': Design.objects.get(id=id)
         }
     return render(request, "market/design.html", context)
+
+def portfolio(request, id):
+    if not 'user_id' in request.session and not 'designer' in request.session:
+        return redirect('/')
+    user = User.objects.get(id = id)
     
+    designs = Design.objects.filter(designer = user)
+    context = {
+        'user': user,
+        'designs': designs
+    }
+    return render(request, "market/designs.html", context)
 
 def logout(request):
     request.session.clear()
     return redirect('/')
     
-    
+
+
+"""     print(id)
+    print('-------')
+    print(request.session['user_id'])
+    test = int(request.session['user_id'])
+    print(id == test)
+    print(1 == 1)
+    if id == request.session['user_id']:
+        return redirect('/')
+ """

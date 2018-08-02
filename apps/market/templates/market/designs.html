@@ -48,7 +48,10 @@
                                 My Account
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                {% if 'designer' in request.session %}<a class="dropdown-item" href="/newdesign">Add Design</a>{% endif%}
+                                {% if 'designer' in request.session %}
+                                    <a class="dropdown-item" href="/newdesign">Add Design</a>
+                                    <a class="dropdown-item" href="/viewdesigns/{{request.session.user_id}}">Manage Designs</a>
+                                {% endif%}
                                 <a class="dropdown-item" href="/editprofile">Edit Account</a>
                                 <a class="dropdown-item" href="">View Orders</a>
                                 <div class="dropdown-divider"></div>
@@ -76,30 +79,8 @@
         <hr>
     <div class="container-fluid">
        <div class="row">
-            <div class="col-md-10 order-md-2">
-                    <h1>Designs</h1>
-                    <img src="https://s3.us-east-2.amazonaws.com/shirtatlas-static/1USA+Flag+Firefighter.png" width="100px">
-                </div>  
-           <div class="col-md-2">
-               <h5>Categories</h5>
-                <ul class="list-group list-group-flush" id="cat-list">
-                    <li class="list-group-item list-group-item-action"><a href="/tattoo">Tattoo</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/heraldy">Heraldry</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/holidays">Holiday</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/religious">Religious</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/sports">Sports</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/funny">Funny</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/artistic">Artistic</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/comics">Comics</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/retro">Retro</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/sci-fi">Sci-Fi</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/anime">Anime</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/animals">Animals</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/cars">Cars</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/cars">Patriotic</a></li>
-                </ul>
-          
-               
+            <div class="col">
+                 
            </div>
 
        </div>

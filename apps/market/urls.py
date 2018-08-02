@@ -10,5 +10,6 @@ urlpatterns = [
     url(r'^editpassword$', views.editpassword),
     url(r'^newdesign$', views.newdesign),
     url(r'^test$', views.test),
-    url(r'^(?P<id>\d+)$', views.design)
+    url(r'^(?P<id>\d+)$', views.design),
+    url(r'^viewdesigns/(?P<id>\d+)$', views.portfolio)
 ]
