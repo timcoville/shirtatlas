@@ -5,15 +5,20 @@ from datetime import datetime
 from django.db.models import CharField, Model, BooleanField, DecimalField
 from django.contrib.postgres.fields import ArrayField
 
-    
+import os    
 
 
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = 'shirtatlas-static'
 
 import bcrypt
 import re
+import boto3
 
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 
+s3 = boto3.resource('s3')
 
 
 
@@ -121,6 +126,15 @@ class UserManager(models.Manager):
 
 class DesignManager(models.Manager):
     def upload_design(self, postData, postFiles):
+        if "category" in postData:
+            cats = postData.getlist('category')
+        
+        try:
+            image_name = postFiles['design_file'].name
+            image_type = postFiles['design_file'].content_type
+        except:
+            image_name = ""
+    
         errors = []
         if len(postData['name']) == 0:
             errors.append("Shirt design requires a name")
@@ -128,21 +142,23 @@ class DesignManager(models.Manager):
             errors.append("Shirt requires a description greater than 3 characters")
         if len(Design.objects.filter(name__iexact = postData['name'])):
             errors.append("This name already exists, try a variation")
-        if "category" not in postData:
+        if not "category" in postData:
             errors.append("Category required")
         if "category" in postData:
-            if len(postData['category']) > 3:
+            if len(cats) > 3:
                 errors.append("Only 3 categories allowed")
-        if len(postData['design_file']) == 0:
+        if len(image_name) == 0:
             errors.append("Image of shirt design required!")    
-        if len(postData['design_file']) != 0:
-            if ".png" not in postData['design_file'] or ".jpg" not in postData['design_file']:
+        if len(image_name) != 0:
+            if image_type != 'image/png' and image_type != 'image/jpg':
                 errors.append('Design must be a valid format (.png or .jpg)')
         if postData['price'] < 5:
             errors.append('Price must be greater than $5')
         if len(errors) > 0:
             return { "errors" : errors }
-        
+        key = postData['user_id'] + image_name
+        print(key)
+        s3.Bucket(AWS_STORAGE_BUCKET_NAME).put_object(Key=key, Body=postFiles['design_file'])
         
         return { }
 

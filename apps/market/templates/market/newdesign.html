@@ -84,7 +84,7 @@
                 {% endif %}
                 <form action="/newdesign" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="hidden" value="{{request.session.user_id}}">
+                    <input type="hidden" name="user_id" value="{{request.session.user_id}}">
                     <div class="form-row">
                         <div class="form-group col-md-6">                      
                             <input type="text" class="form-control" id="inputName" name="name" placeholder="Design Name">
@@ -101,7 +101,7 @@
                     <div class="form-row">
                             <div class="form-group col-md-6">
                                     <label for="inputCategory">Categories</label>
-                                    <select multiple class="form-control" id="inputCategory" name="category">
+                                    <select multiple="multiple" class="form-control" id="inputCategory" name="category">
                                         <option>Tattoo</option>
                                        
                                         <option>Heraldry</option>
