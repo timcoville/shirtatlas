@@ -81,7 +81,13 @@ def newdesign(request):
         for error in result['errors']:
             messages.error(request, error)
         return redirect('/newdesign')
-    return redirect('/newdesign')
+    print(result)
+    design = result['design']
+    print(design)
+    string = "/"
+    string += str(design.id)
+    print(string)
+    return redirect(string)
 
 def design(request, id):
     context = {
