@@ -71,8 +71,8 @@ def editpassword(request):
     return redirect('/editprofile')
 
 def newdesign(request):
-    if not 'user_id' in request.session and not 'designer' in request.session:
-        return redirect('')
+    if not 'user_id' in request.session or not 'designer' in request.session:
+        return redirect('/')
     if request.method != 'POST':
         return render(request, "market/newdesign.html")
     print(request.POST)
@@ -95,8 +95,9 @@ def design(request, id):
     return render(request, "market/design.html", context)
 
 def portfolio(request, id):
-    if not 'user_id' in request.session and not 'designer' in request.session:
+    if not 'user_id' in request.session or not 'designer' in request.session:
         return redirect('/')
+    
     user = User.objects.get(id = id)
     
     designs = Design.objects.filter(designer = user).order_by('-created_at')
@@ -107,14 +108,14 @@ def portfolio(request, id):
     return render(request, "market/designs.html", context)
 
 def edit(request, user_id, design_id):
-    if not 'user_id' in request.session and not 'designer' in request.session:
+    if not 'user_id' in request.session or not 'designer' in request.session:
         return redirect('/')
     if int(user_id) != request.session['user_id']:
         return redirect('/')
     return redirect('/')
 
 def delete(request, user_id, design_id):
-    if not 'user_id' in request.session and not 'designer' in request.session:
+    if not 'user_id' in request.session or not 'designer' in request.session:
         return redirect('/')
     if int(user_id) != request.session['user_id']:
         return redirect('/')
@@ -122,8 +123,7 @@ def delete(request, user_id, design_id):
     return redirect('/portfolio/'+user_id)
 
 def pause(request, user_id, design_id):
-    print('hitting route')
-    if not 'user_id' in request.session and not 'designer' in request.session:
+    if not 'user_id' in request.session or not 'designer' in request.session:
         return redirect('/')
     if int(user_id) != request.session['user_id']:
         return redirect('/')

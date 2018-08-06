@@ -81,10 +81,17 @@
        <div class="row">
             <div class="col-md-10 order-md-2">
                 <div class="row">
+                        
                     <div class="col-sm-4">
                         <img src="{% static design.display_image %}"class="img-thumbnail">
                     </div>
                     <div class="col-sm-8">
+                            
+                            {% if design.paused and design.designer.id == request.session.user_id %}
+                            <div class="alert alert-warning" role="alert">
+                                    Your design is currently paused and hidden, <a href="/portfolio/{{request.session.user_id}}">update</a> your listing to make public!
+                            </div>
+                            {% endif %}
                         <div class="card">
                             <h5 class="card-header">{{design.name}}</h5>
                             <div class="card-body">
@@ -93,9 +100,14 @@
                               <p class="card-text">{{design.desc}}</p>
                               <h6 class="card-title">Licenses Available: {{design.licenses}}</h6>
                               <hr>
-                              <a href="#" class="btn btn-primary">Add to Cart</a> 
+                              {% if design.designer.id == request.session.user_id %}
+                              <a href="/portfolio/{{request.session.user_id}}/edit/{{design.id}}">Edit my Design</a>
+                              {% else %}
+                              <a href="#" class="btn btn-primary">Add to Cart</a>  
+                              {% endif %}
                             </div>
                           </div>
+                          <br>
                     </div>
                   </div>
                     
