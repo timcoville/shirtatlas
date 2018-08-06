@@ -20,6 +20,27 @@
         padding: 5px;
         font-size:.8em;
     }
+
+    .table {
+        border-radius: 5px;
+    }
+    .table > thead > tr > th {
+        border-top: 0px !important;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .table > tbody > tr > td  {
+     vertical-align: middle;
+     text-align: center;
+    }
+
+    img {
+        max-width:125px;
+        max-height:125px;
+        width: auto;
+        height: auto;
+    }
+    
     </style>
 </head>
 <body>
@@ -80,7 +101,33 @@
     <div class="container-fluid">
        <div class="row">
             <div class="col">
-                 
+                <table class="table table-hover table-dark">
+                    <thead>
+                      <tr>
+                        <th scope="col">Design</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Licenses</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Orders</th>
+                        <th scope="col">Revenue</th>
+                        <th scope="col">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody class="align-middle">
+                        {% for design in designs %}
+                            <tr >
+                                
+                                <td><img src="{% static design.display_image %}" class="img-thumbnail"></td>
+                                <td>{{design.name}}</td>
+                                <td>{{design.licenses}}</td>
+                                <td>${{design.price}}</td>
+                                <td>{{design.sales}}</td>
+                                <td>${{design.total_revenue}}</td>
+                                <td>Edit | Delete</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                  </table>
            </div>
 
        </div>

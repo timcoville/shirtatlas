@@ -214,10 +214,14 @@ class Design(models.Model):
         CharField(max_length=15),
         size = 3
     )
+    sales = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     designer = models.ForeignKey(User, related_name="designer_uploads")
     objects = DesignManager()
+    @property
+    def total_revenue(self):
+        return self.price * self.sales
 
 
 class Order(models.Model):

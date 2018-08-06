@@ -112,7 +112,10 @@ def logout(request):
     
 
 
-"""     print(id)
+"""
+    Review with Patrick:
+
+     print(id)
     print('-------')
     print(request.session['user_id'])
     test = int(request.session['user_id'])
