@@ -99,12 +99,42 @@ def portfolio(request, id):
         return redirect('/')
     user = User.objects.get(id = id)
     
-    designs = Design.objects.filter(designer = user)
+    designs = Design.objects.filter(designer = user).order_by('-created_at')
     context = {
         'user': user,
         'designs': designs
     }
     return render(request, "market/designs.html", context)
+
+def edit(request, user_id, design_id):
+    if not 'user_id' in request.session and not 'designer' in request.session:
+        return redirect('/')
+    if int(user_id) != request.session['user_id']:
+        return redirect('/')
+    return redirect('/')
+
+def delete(request, user_id, design_id):
+    if not 'user_id' in request.session and not 'designer' in request.session:
+        return redirect('/')
+    if int(user_id) != request.session['user_id']:
+        return redirect('/')
+    Design.objects.get(id=design_id).delete()
+    return redirect('/portfolio/'+user_id)
+
+def pause(request, user_id, design_id):
+    print('hitting route')
+    if not 'user_id' in request.session and not 'designer' in request.session:
+        return redirect('/')
+    if int(user_id) != request.session['user_id']:
+        return redirect('/')
+    design = Design.objects.get(id=design_id)
+    if (design.paused):
+        design.paused = False
+        design.save()
+        return redirect('/portfolio/'+user_id)
+    design.paused = True
+    design.save()    
+    return redirect('/portfolio/'+user_id)
 
 def logout(request):
     request.session.clear()

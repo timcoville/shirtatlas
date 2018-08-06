@@ -63,6 +63,7 @@
     }
     
     </style>
+
 </head>
 <body>
  
@@ -92,7 +93,7 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 {% if 'designer' in request.session %}
                                     <a class="dropdown-item" href="/newdesign">Add Design</a>
-                                    <a class="dropdown-item" href="/viewdesigns/{{request.session.user_id}}">Manage Designs</a>
+                                    <a class="dropdown-item" href="/portfolio/{{request.session.user_id}}">My Portfolio</a>
                                 {% endif%}
                                 <a class="dropdown-item" href="/editprofile">Edit Account</a>
                                 <a class="dropdown-item" href="">View Orders</a>
@@ -144,7 +145,21 @@
                                 <td>${{design.price}}</td>
                                 <td>{{design.sales}}</td>
                                 <td>${{design.total_revenue}}</td>
-                                <td><a href="/edit/{{design.id}}">Edit</a> | <a href="/delete/{{design.id}}">Delete</a></td>
+                                
+                                
+                                <td>    
+                                        <a href="/{{design.id}}">
+                                            <button type="button" class="btn btn-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="top" data-content="View how your listing looks to the public." data-trigger="hover">View</button></a>
+                                        <a href="/portfolio/{{request.session.user_id}}/edit/{{design.id}}">
+                                            <button type="button" class="btn btn-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="top" data-content="Edit the design, add more licenses or delete listing completely." data-trigger="hover">Edit</button></a>
+                                        {% if design.paused %}    
+                                        <a href="/portfolio/{{request.session.user_id}}/pause/{{design.id}}">
+                                            <button type="button" class="btn btn-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="top" data-content="Unpause to sell again and add to public listings." data-trigger="hover">Unpause</button></a>
+                                        {% else %}      
+                                        <a href="/portfolio/{{request.session.user_id}}/pause/{{design.id}}">
+                                            <button type="button" class="btn btn-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="top" data-content="Pause sales and temporarily remove from public listings." data-trigger="hover">Pause</button></a>
+                                        {% endif %}
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -165,5 +180,10 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+    <script>
+            $(function () {
+                $('[data-toggle="popover"]').popover()
+            })
+        </script>
 </body>
 </html>

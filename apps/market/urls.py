@@ -11,5 +11,8 @@ urlpatterns = [
     url(r'^newdesign$', views.newdesign),
     url(r'^test$', views.test),
     url(r'^(?P<id>\d+)$', views.design),
-    url(r'^viewdesigns/(?P<id>\d+)$', views.portfolio)
+    url(r'^portfolio/(?P<id>\d+)$', views.portfolio),
+    url(r'^portfolio/(?P<user_id>\d)/edit/(?P<design_id>\d$)$', views.edit),
+    url(r'^portfolio/(?P<user_id>\d)/pause/(?P<design_id>\d$)$', views.pause),
+    url(r'^portfolio/(?P<user_id>\d)/delete/(?P<design_id>\d$)$', views.delete),
 ]

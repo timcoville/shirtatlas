@@ -215,6 +215,7 @@ class Design(models.Model):
         size = 3
     )
     sales = models.IntegerField(default=0)
+    paused = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     designer = models.ForeignKey(User, related_name="designer_uploads")
