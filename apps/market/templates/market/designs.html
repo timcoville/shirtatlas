@@ -34,10 +34,31 @@
      text-align: center;
     }
 
-    img {
+/*     img {
         max-width:125px;
         max-height:125px;
         width: auto;
+        height: auto;
+        overflow: hidden;
+    } */
+
+    .test {
+        overflow: hidden;
+        max-width: 135px;
+        height: auto;
+        margin: 0 auto;
+        background-color: #fff;
+        border: 3px solid #dee2e6;
+        border-radius: .25rem;
+    }
+
+    .tower {
+    width: 135px;
+    height: 135px;
+    }
+
+    .img-thumbnail2 {
+        max-width: 100%;
         height: auto;
     }
     
@@ -101,7 +122,7 @@
     <div class="container-fluid">
        <div class="row">
             <div class="col">
-                <table class="table table-hover table-dark">
+                <table class="table table-hover table-light">
                     <thead>
                       <tr>
                         <th scope="col">Design</th>
@@ -117,13 +138,13 @@
                         {% for design in designs %}
                             <tr >
                                 
-                                <td><img src="{% static design.display_image %}" class="img-thumbnail"></td>
+                                <td><div class="test tower"><a href="/{{design.id}}"><img src="{% static design.display_image %}" class="img-thumbnail2"></a></div></td>
                                 <td>{{design.name}}</td>
                                 <td>{{design.licenses}}</td>
                                 <td>${{design.price}}</td>
                                 <td>{{design.sales}}</td>
                                 <td>${{design.total_revenue}}</td>
-                                <td>Edit | Delete</td>
+                                <td><a href="/edit/{{design.id}}">Edit</a> | <a href="/delete/{{design.id}}">Delete</a></td>
                             </tr>
                         {% endfor %}
                     </tbody>
