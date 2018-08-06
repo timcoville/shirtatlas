@@ -77,13 +77,120 @@
             </div>
         </nav>
         <hr>
-    <div class="container-fluid">
-        <div class="row">
-            
-
-        </div>
-    </div>
-    <hr>
+        <div class="container-fluid">
+                <hr>
+                  <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <h3>Add New Design</h3>
+                        <hr>
+                        {% if messages %}
+                            <div class="alert alert-danger" role="alert">
+                            {% for message in messages %}
+                                <p class="text-monospace small" style="margin-bottom:0px;">{{ forloop.counter }}) {{message}}. </p>
+                            {% endfor %}
+                            </div>
+                            <hr>
+                        {% endif %}
+                        <form action="/editdesign" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="hidden" name="user_id" value="{{request.session.user_id}}">
+                            <div class="form-row">
+                                <div class="form-group col">     
+                                    <label for="inputName">Name</label>                 
+                                    <input type="text" class="form-control" id="inputName" name="name" value="{{design.name}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                    Display Image
+                    
+                                    <div class="col" style="margin-top:5px;">
+                                            <input type="file" class="custom-file-input" id="displayFile" name="design_image">
+                                            <label class="custom-file-label" for="displayFile">Choose file - New Display Image</label>
+                                            <small id="displayFile" class="form-text text-muted">
+                                                    Image to feature your design on our website, please use <a href="https://placeit.net/" target="new">PlaceIt</a>.
+                                            </small>
+                                        </div>
+                            </div>
+                            <div class="form-group">
+                                    Design File
+                                    
+                                    <div class="col" style="margin-top:5px;">
+                                            <input type="file" class="custom-file-input" id="designFile" name="design_file">
+                                            <label class="custom-file-label" for="designFile">Choose file - New Design Image</label>
+                                            <small id="designFile" class="form-text text-muted">
+                                                    This is the design file issued with the license, please use a png or jpg.
+                                            </small>
+                                    </div>
+                                        
+                            </div>
+                            <div class="form-group">
+                                <label for="inputDesc">Description</label>
+                                <input type="text" class="form-control" id="inputDesc" name="desc" value="{{design.desc}}">
+                            </div>
+                            <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                            <label for="inputCategory">Categories</label>
+                                            <select multiple="multiple" class="form-control" id="inputCategory" name="category" style="height:82%; margin-bottom: 5px;">
+                                                <option>Tattoo</option>
+                                               
+                                                <option>Heraldry</option>
+                                                <option>Holiday</option>
+                                                
+                                                <option>Religious</option>
+                                                
+                                                <option>Sports</option>
+                                               
+                                                <option>Funny</option>
+                                                <option>Artistic</option>
+                                                <option>Comics</option>
+                                               
+                                                <option>Retro</option>
+                                                <option>Sci-Fi</option>
+                                               
+                                                <option>Anime</option>
+                                                <option>Animals</option>
+                                                <option>Patriotic</option>
+                                                <option>Cars</option>
+                          
+                                            </select>
+                                            <small id="inputCategory" class="form-text text-muted">
+                                                    Current Categories: 
+                                                    {% for cat in design.categories %}
+                                                        {% if forloop.last %}
+                                                            {{cat}}. Re-select all categories, max 3.
+                                                        {% else %}
+                                                            {{cat}},
+                                                        {% endif %}
+                                                    {% endfor %}
+                                            </small>
+                                        </div>
+        
+                                <div class="form-group col-md-6">
+                                    <label for="inputPrice">Price</label>
+                                    <input type="number" class="form-control" id="inputPrice" name="price" value="{{design.price}}" step="0.01" min=5>
+                                    <small id="inputPrice" class="form-text text-muted">
+                                            Minimum list price is $5 for a design.
+                                    </small>
+                                    <hr>
+                                    <label for="inputLicenses"># of Licenses</label>
+                                    <input type="number" class="form-control" id="inputLicenses" name="licenses" value="{{design.licenses}}" min=1>
+                                    <small id="inputLicenses" class="form-text text-muted">
+                                            How many licenses do you want to sell?
+                                    </small>
+                                </div>
+                            </div>
+                            <hr>
+                          <button type="submit" class="btn btn-primary">Update</button>
+                        </form>
+                    </div>
+                  </div>
+                <hr>
+                <div class="row">
+                    <div class="col text-center">www.shirtatlas.com</div>
+                </div>
+                <hr>
+        
+            </div>
 
 
 

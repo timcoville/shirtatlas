@@ -101,7 +101,7 @@
                               <h6 class="card-title">Licenses Available: {{design.licenses}}</h6>
                               <hr>
                               {% if design.designer.id == request.session.user_id %}
-                              <a href="/portfolio/{{request.session.user_id}}/edit/{{design.id}}">Edit my Design</a>
+                              <a href="/portfolio/{{request.session.user_id}}/edit/{{design.id}}" class="btn btn-secondary">Edit Design</a>
                               {% else %}
                               <a href="#" class="btn btn-primary">Add to Cart</a>  
                               {% endif %}

@@ -126,6 +126,9 @@ class UserManager(models.Manager):
             
 
 class DesignManager(models.Manager):
+
+
+
     def upload_design(self, postData, postFiles):
         if "category" in postData:
             cats = postData.getlist('category')

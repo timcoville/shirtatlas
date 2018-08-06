@@ -89,8 +89,11 @@ def newdesign(request):
     return redirect(route)
 
 def design(request, id):
+    design = Design.objects.get(id=id)
+    if design.paused:
+        return redirect('/')
     context = {
-        'design': Design.objects.get(id=id)
+        'design': design
         }
     return render(request, "market/design.html", context)
 
@@ -107,12 +110,16 @@ def portfolio(request, id):
     }
     return render(request, "market/designs.html", context)
 
-def edit(request, user_id, design_id):
+def editdesign(request, user_id, design_id):
     if not 'user_id' in request.session or not 'designer' in request.session:
         return redirect('/')
     if int(user_id) != request.session['user_id']:
         return redirect('/')
-    return redirect('/')
+    if request.method != 'POST':
+        context = {
+            'design' : Design.objects.get(id=design_id)
+        }
+        return render(request, "market/editdesign.html", context)
 
 def delete(request, user_id, design_id):
     if not 'user_id' in request.session or not 'designer' in request.session:
@@ -142,15 +149,3 @@ def logout(request):
     
 
 
-"""
-    Review with Patrick:
-
-     print(id)
-    print('-------')
-    print(request.session['user_id'])
-    test = int(request.session['user_id'])
-    print(id == test)
-    print(1 == 1)
-    if id == request.session['user_id']:
-        return redirect('/')
- """
