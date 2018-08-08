@@ -125,9 +125,9 @@ def editdesign(request, user_id, design_id):
         for error in result['errors']:
             messages.error(request, error)
         return redirect('/portfolio/'+user_id+'/edit/'+design_id)        
-    design = result['design']
-    print(design.categories)
-    return redirect('/portfolio/'+user_id+'/edit/'+design_id)
+    
+    
+    return redirect('/portfolio/'+user_id)
 
 def delete(request, user_id, design_id):
     if not 'user_id' in request.session or not 'designer' in request.session:

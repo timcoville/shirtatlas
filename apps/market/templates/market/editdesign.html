@@ -163,8 +163,9 @@
                                                         {% endif %}
                                                     {% endfor %}
                                             </small>
-                                        </div>
-        
+                                            <div class="d-block d-none d-sm-block d-md-none"><br><br></div>        
+                                    </div>
+                                    
                                 <div class="form-group col-md-6">
                                     <label for="inputPrice">Price</label>
                                     <input type="number" class="form-control" id="inputPrice" name="price" value="{{design.price}}" step="0.01" min=5>
@@ -182,6 +183,15 @@
                             <hr>
                           <button type="submit" class="btn btn-primary">Update</button>
                         </form>
+                        <hr>
+                        {% if design.paused %}    
+                            <a href="/portfolio/{{request.session.user_id}}/pause/{{design.id}}">
+                            <button type="button" class="btn btn-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="top" data-content="Unpause to sell again and add to public listings." data-trigger="hover">Unpause</button></a>
+                        {% else %}      
+                            <a href="/portfolio/{{request.session.user_id}}/pause/{{design.id}}">
+                            <button type="button" class="btn btn-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="top" data-content="Pause sales and temporarily remove from public listings." data-trigger="hover">Pause</button></a>
+                        {% endif %}
+                            <a href="/portfolio/{{request.session.user_id}}/delete/{{design_id}}"> <button type="button" class="btn btn-danger btn-sm" data-container="body" data-toggle="popover" data-placement="top" data-content="This will permanently delete this listing, you can hide this from the marketplace by pausing your campaign." data-trigger="hover">Delete</button></a>
                     </div>
                   </div>
                 <hr>
@@ -201,5 +211,10 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+    <script>
+            $(function () {
+                $('[data-toggle="popover"]').popover()
+            })
+    </script>
 </body>
 </html>
