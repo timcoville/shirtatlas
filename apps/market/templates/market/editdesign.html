@@ -78,10 +78,9 @@
         </nav>
         <hr>
         <div class="container-fluid">
-                <hr>
                   <div class="row justify-content-center">
                     <div class="col-md-8">
-                        <h3>Add New Design</h3>
+                        <h3>Edit Your Design</h3>
                         <hr>
                         {% if messages %}
                             <div class="alert alert-danger" role="alert">
@@ -91,9 +90,10 @@
                             </div>
                             <hr>
                         {% endif %}
-                        <form action="/editdesign" method="post" enctype="multipart/form-data">
+                        <form action="/portfolio/{{request.session.user_id}}/edit/{{design.id}}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <input type="hidden" name="user_id" value="{{request.session.user_id}}">
+                            <input type="hidden" name="design_id" value="{{design.id}}">
                             <div class="form-row">
                                 <div class="form-group col">     
                                     <label for="inputName">Name</label>                 
@@ -154,7 +154,7 @@
                           
                                             </select>
                                             <small id="inputCategory" class="form-text text-muted">
-                                                    Current Categories: 
+                                                    Current Cats: 
                                                     {% for cat in design.categories %}
                                                         {% if forloop.last %}
                                                             {{cat}}. Re-select all categories, max 3.

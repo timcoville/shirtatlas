@@ -120,6 +120,14 @@ def editdesign(request, user_id, design_id):
             'design' : Design.objects.get(id=design_id)
         }
         return render(request, "market/editdesign.html", context)
+    result = Design.objects.edit_design(request.POST, request.FILES)
+    if 'errors' in result:
+        for error in result['errors']:
+            messages.error(request, error)
+        return redirect('/portfolio/'+user_id+'/edit/'+design_id)        
+    design = result['design']
+    print(design.categories)
+    return redirect('/portfolio/'+user_id+'/edit/'+design_id)
 
 def delete(request, user_id, design_id):
     if not 'user_id' in request.session or not 'designer' in request.session:

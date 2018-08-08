@@ -126,7 +126,64 @@ class UserManager(models.Manager):
             
 
 class DesignManager(models.Manager):
-
+    def edit_design(self, postData, postFiles):
+        the_design = Design.objects.get(id=postData['design_id'])
+        print(postData)
+        
+        new_design_file = True
+        new_display_image = True
+        
+        try:
+            design_file_type = postFiles['design_file'].content_type
+        except:
+            new_design_file = False
+        try:
+            display_image_type = postFiles['display_image'].content_type
+        except:
+            new_display_image = False
+        errors = []
+        
+        if len(postData['desc']) < 10:
+            errors.append("Shirt requires a description greater than 9 characters")
+        if the_design.name != postData['name']:
+            if len(postData['name']) == 0:
+                errors.append("Shirt design requires a name")
+            if len(Design.objects.filter(name__iexact = postData['name'])):
+                errors.append("This name already exists, try a variation")
+        if "category" in postData:
+            cats = postData.getlist('category')
+        else:
+            cats = the_design.categories
+        if len(cats) > 3:
+            errors.append("Only 3 categories allowed")
+        if new_design_file:
+            if design_file_type != 'image/png' and design_file_type != 'image/jpg':
+                errors.append('Design file must be a valid format (.png or .jpg)')
+        if new_display_image:
+            if display_image_type != 'image/png' and display_image_type != 'image/jpg':
+                errors.append('Display image must be a valid format (.png or .jpg)')    
+        if postData['price'] < 5 or postData['price'] == '':
+            errors.append('Price must be greater than $4')
+        if postData['licenses'] < 1 or postData['licenses'] == '':
+            errors.append('Licenses must be greater than 0')
+        if len(errors) > 0:
+            return { "errors" : errors }
+        
+        if new_design_file:
+            media_key = the_design.design_file
+            s3.Bucket(AWS_STORAGE_BUCKET_NAME_MEDIA).put_object(Key=media_key, Body=postFiles['design_file'])
+        if new_display_image:
+            static_key = the_design.display_image
+            s3.Bucket(AWS_STORAGE_BUCKET_NAME_STATIC).put_object(Key=static_key, Body=postFiles['design_image'])
+        
+        the_design.name = postData['name']
+        the_design.desc = postData['desc']
+        the_design.categories = cats
+        the_design.licenses = postData['licenses']
+        the_design.price = postData['price']
+        the_design.save()
+        print(the_design)
+        return {'design': the_design}
 
 
     def upload_design(self, postData, postFiles):
@@ -134,22 +191,22 @@ class DesignManager(models.Manager):
             cats = postData.getlist('category')
         print(postFiles)
         try:
-            image_name = postFiles['design_file'].name
-            image_type = postFiles['design_file'].content_type
+            design_file_name = postFiles['design_file'].name
+            design_file_type = postFiles['design_file'].content_type
         except:
-            image_name = ""
+            design_file_name = ""
         
         try:
-            design_image = postFiles['design_image'].name
-            design_type = postFiles['design_image'].content_type
+            design_image_name = postFiles['design_image'].name
+            design_image_type = postFiles['design_image'].content_type
         except:
-            design_image = ""
-    
+            design_image_name = ""
+
         errors = []
         if len(postData['name']) == 0:
             errors.append("Shirt design requires a name")
-        if len(postData['desc']) < 3:
-            errors.append("Shirt requires a description greater than 3 characters")
+        if len(postData['desc']) < 10:
+            errors.append("Shirt requires a description greater than 9 characters")
         if len(Design.objects.filter(name__iexact = postData['name'])):
             errors.append("This name already exists, try a variation")
         if not "category" in postData:
@@ -157,15 +214,15 @@ class DesignManager(models.Manager):
         if "category" in postData:
             if len(cats) > 3:
                 errors.append("Only 3 categories allowed")
-        if len(image_name) == 0:
+        if len(design_file_name) == 0:
             errors.append("Design file required")    
-        if len(image_name) != 0:
-            if image_type != 'image/png' and image_type != 'image/jpg':
+        if len(design_file_name) != 0:
+            if design_file_type != 'image/png' and design_file_type != 'image/jpg':
                 errors.append('Design must be a valid format (.png or .jpg)')
-        if len(design_image) == 0:
+        if len(design_image_name) == 0:
             errors.append("Display image required")    
-        if len(design_image) != 0:
-            if design_type != 'image/png' and design_type != 'image/jpg':
+        if len(design_image_name) != 0:
+            if design_image_type != 'image/png' and design_image_type != 'image/jpg':
                 errors.append('Design must be a valid format (.png or .jpg)')
         if postData['price'] < 5:
             errors.append('Price must be greater than $4')
@@ -174,8 +231,8 @@ class DesignManager(models.Manager):
         if len(errors) > 0:
             return { "errors" : errors }
 
-        static_key = postData['user_id'] + "$%#" + design_image
-        media_key = postData['user_id'] + image_name
+        static_key = postData['user_id'] + "$%#" + design_image_name
+        media_key = postData['user_id'] + design_file_name
 
         s3.Bucket(AWS_STORAGE_BUCKET_NAME_STATIC).put_object(Key=static_key, Body=postFiles['design_image'])
         s3.Bucket(AWS_STORAGE_BUCKET_NAME_MEDIA).put_object(Key=media_key, Body=postFiles['design_file'])
