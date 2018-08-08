@@ -39,7 +39,6 @@ def login(request):
     if 'user' in result:
         request.session['user_id'] = result['user'].id
         if result['user'].designer == True:
-            print("works")
             request.session['designer'] = True
         return redirect('/')
 
