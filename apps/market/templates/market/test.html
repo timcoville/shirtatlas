@@ -12,7 +12,9 @@
     <input name="name" value="{{request.GET.name}}">
     <button type="submit">Go</button>
     </form>
-
+    {% for item in request.session.cart %}
+        {{item}}
+    {% endfor %}
     <hr>
     
 </body>

@@ -15,8 +15,17 @@ def index2(request):
     print(query)
     return render(request, "market/index.html")
 
-def test(request):
-    return render(request, "market/designs.html")
+def add_to_cart(request, design_id):
+    try:
+        design = Design.objects.get(id=design_id)
+    except:
+        return redirect('/')
+    if not 'cart' in request.session:
+        request.session['cart'] = []
+    cart = request.session['cart']
+    cart.append(design.id)
+    request.session['cart'] = cart
+    return redirect('/')
 
 def register(request):
     if request.method != 'POST':
