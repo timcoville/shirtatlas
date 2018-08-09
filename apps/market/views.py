@@ -33,12 +33,26 @@ def add_to_cart(request, design_id):
 def designs(request):
     category = request.GET.get('cat')
     if category != None:
-        designs = Design.objects.filter(categories__contains = [category])
+        results = Design.objects.filter(categories__contains = [category])
     else:
-        designs = Design.objects.all()
+        results = Design.objects.all()
+
+    page = request.GET.get('page', 1)
+    
+    paginator = Paginator(results, 4)
+    
+    try:
+        designs = paginator.page(page)
+    except PageNotAnInteger:
+        designs = paginator.page(1)
+    except EmptyPage:
+        designs = paginator.page(paginator.num_pages)
+
+
+
     context = {
         'cats': cats,
-        'current_cat': request.GET.get('cat'),
+        'current_cat': category,
         'designs': designs
     }
     return render(request, "market/designs.html", context)
