@@ -140,7 +140,7 @@
                                 <td><div class="test tower"><a href="/{{design.id}}"><img src="{% static design.display_image %}" class="img-thumbnail2"></a></div></td>
                                 <td>{{design.name}}</td>
                                 <td>{{design.licenses}}</td>
-                                <td>${{design.price}}</td>
+                                <td>${{design.price}} = {{design.sale_price}}</td>
                                 <td>{{design.sales}}</td>
                                 <td>${{design.total_revenue}}</td>
                                 
@@ -156,6 +156,13 @@
                                         {% else %}      
                                         <a href="/portfolio/{{request.session.user_id}}/pause/{{design.id}}">
                                             <button type="button" class="btn btn-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="top" data-content="Pause sales and temporarily remove from public listings." data-trigger="hover">Pause</button></a>
+                                        {% endif %}
+                                        {% if design.on_sale %}    
+                                        <a href="/portfolio/{{request.session.user_id}}/sale/{{design.id}}">
+                                            <button type="button" class="btn btn-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="top" data-content="Remove 10% discount and list at regular price." data-trigger="hover">Remove Discount</button></a>
+                                        {% else %}      
+                                        <a href="/portfolio/{{request.session.user_id}}/sale/{{design.id}}">
+                                            <button type="button" class="btn btn-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="top" data-content="Put this item on sale, we apply a 10% discount based on the list price." data-trigger="hover">Discount</button></a>
                                         {% endif %}
                                 </td>
                             </tr>

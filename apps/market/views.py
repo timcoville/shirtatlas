@@ -4,6 +4,13 @@ from models import *
 
 
 def index(request):
+    context = {
+        'new_designs': Design.objects.filter(paused = False).order_by('-id')[:5],
+        'sale_designs': Design.objects.filter(on_sale = True).order_by('-id')[:5],
+    }
+    return render(request, "market/index.html", context)
+
+def index2(request):
     query = request.GET.get('name')
     print(query)
     return render(request, "market/index.html")
@@ -147,6 +154,20 @@ def pause(request, user_id, design_id):
         design.save()
         return redirect('/portfolio/'+user_id)
     design.paused = True
+    design.save()    
+    return redirect('/portfolio/'+user_id)
+
+def sale(request, user_id, design_id):
+    if not 'user_id' in request.session or not 'designer' in request.session:
+        return redirect('/')
+    if int(user_id) != request.session['user_id']:
+        return redirect('/')
+    design = Design.objects.get(id=design_id)
+    if (design.on_sale):
+        design.on_sale = False
+        design.save()
+        return redirect('/portfolio/'+user_id)
+    design.on_sale = True
     design.save()    
     return redirect('/portfolio/'+user_id)
 

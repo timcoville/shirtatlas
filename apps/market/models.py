@@ -5,7 +5,8 @@ from datetime import datetime
 from django.db.models import CharField, Model, BooleanField, DecimalField, IntegerField
 from django.contrib.postgres.fields import ArrayField
 
-import os    
+import os
+from decimal import *
 
 
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
@@ -128,7 +129,7 @@ class UserManager(models.Manager):
 class DesignManager(models.Manager):
     def edit_design(self, postData, postFiles):
         the_design = Design.objects.get(id=postData['design_id'])
-        print(postData)
+        print(postFiles)
         
         new_design_file = True
         new_display_image = True
@@ -138,9 +139,10 @@ class DesignManager(models.Manager):
         except:
             new_design_file = False
         try:
-            display_image_type = postFiles['display_image'].content_type
+            display_image_type = postFiles['design_image'].content_type
         except:
             new_display_image = False
+
         errors = []
         
         if len(postData['desc']) < 10:
@@ -172,17 +174,20 @@ class DesignManager(models.Manager):
         if new_design_file:
             media_key = the_design.design_file
             s3.Bucket(AWS_STORAGE_BUCKET_NAME_MEDIA).put_object(Key=media_key, Body=postFiles['design_file'])
+
+            
         if new_display_image:
             static_key = the_design.display_image
             s3.Bucket(AWS_STORAGE_BUCKET_NAME_STATIC).put_object(Key=static_key, Body=postFiles['design_image'])
         
+
         the_design.name = postData['name']
         the_design.desc = postData['desc']
         the_design.categories = cats
         the_design.licenses = postData['licenses']
         the_design.price = postData['price']
         the_design.save()
-        print(the_design)
+        
         return {'design': the_design}
 
 
@@ -271,18 +276,24 @@ class Design(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2, default=20.00)
     licenses = models.IntegerField(null=False)
     categories = ArrayField(
-        CharField(max_length=15),
+        CharField(max_length=30),
         size = 3
     )
     sales = models.IntegerField(default=0)
+    on_sale = models.BooleanField(default=False)
     paused = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     designer = models.ForeignKey(User, related_name="designer_uploads")
     objects = DesignManager()
+
     @property
     def total_revenue(self):
         return self.price * self.sales
+
+    def sale_price(self):
+        discount = self.price * Decimal(.9)
+        return format(float(discount), '.2f')
 
 
 class Order(models.Model):

@@ -15,6 +15,31 @@
     .black-opacity:hover{
         background-color:rgba(0, 0, 0, 0.5);
     }
+    .test {
+        overflow: hidden;
+        max-width: 100%;
+        height: auto;
+        margin: 0 auto;
+        background-color: #fff;
+        border: 3px solid #dee2e6;
+        border-radius: .25rem;
+    }
+
+    .tower {
+    width: 100%;
+    height: 500px;
+    }
+
+    .img-thumbnail2 {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .oldprice {
+        text-decoration: line-through;
+    }
+   
+
     </style>
 </head>
 <body>
@@ -70,80 +95,57 @@
         </nav>
     <div class="container-fluid">
         <hr>
-            <div class="card-group text-white ">
-                    <div class="card">
-                      <img class="card-img" src="{% static 'm-s.jpg' %}" alt="Card image">
-                      <div class="card-img-overlay black-opacity">
-                        <h5 class="card-title">Shirts for Men</h5>
-                        
-                        <button type="button" class="btn btn-dark btn-sm">Shop Now</button>
-                        
-                      </div>
-                    </div>
-                    <div class="card">
-                      <img class="card-img-top" src=" {% static 'w-s.jpg' %}" alt="Card image">
-                      <div class="card-img-overlay black-opacity">
-                        <h5 class="card-title">Shirts for Women</h5>
-                        <button type="button" class="btn btn-dark btn-sm">Shop Now</button>
-
-                      </div>
-                    </div>
-                    <div class="card">
-                      <img class="card-img-top" src=" {% static 'kid-s.jpg' %}" alt="Card image">
-                      <div class="card-img-overlay black-opacity">
-                        <h5 class="card-title">Shirts for Kids</h5>
-                        <!-- <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p> -->
-                        <button type="button" class="btn btn-dark btn-sm">Shop Now</button>
-
-                      </div>
-                    </div>
-            </div>
-        <hr>
+          
         <h2><span class="badge badge-success" >New Arrivals</span> </h2>
 
-        <div class="card-group">
-                <div class="card">
-                  <img class="card-img-top" src="https://s3.us-east-2.amazonaws.com/shirt-atlas/m-s.jpg" alt="Card image cap">
-                  <div class="card-body">
-                    <h5 class="card-title">Shirts for Men</h5>
-                    <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                    
-                  </div>
-                </div>
-                <div class="card">
-                  <img class="card-img-top" src="https://s3.us-east-2.amazonaws.com/shirt-atlas/w-s.jpg" alt="Card image cap">
-                  <div class="card-body">
-                    <h5 class="card-title">Shirts for Women</h5>
-                    <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                    
-                  </div>
-                </div>
-                <div class="card">
-                  <img class="card-img-top" src="https://s3.us-east-2.amazonaws.com/shirt-atlas/kid-s.jpg" alt="Card image cap">
-                  <div class="card-body">
-                    <h5 class="card-title">Shirts for Kids</h5>
-                    <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                    
-                  </div>
-                </div>
-                <div class="card">
-                        <img class="card-img-top" src="https://s3.us-east-2.amazonaws.com/shirt-atlas/kid-s.jpg" alt="Card image cap">
+
+
+
+        <div class="row ">
+            {% for design in new_designs %}
+              <div class="col-md">
+
+                    <div class="card">
+                        <h5 class="card-header">{{design.name}}</h5>
                         <div class="card-body">
-                          <h5 class="card-title">Shirts for Kids</h5>
-                          <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                          
+                                <img src="{% static design.display_image %}" class="img-thumbnail">
+                                <hr>
+
+                          <div class="float-right"><a href="/{{design.id}}" class="btn btn-primary btn-sm">View</a> <a href="#" class="btn btn-warning btn-sm">Buy</a>  </div> <h5 class="card-title"><b>${{design.price}}</b></h5>
+                         
+
                         </div>
-                </div>
-                <div class="card">
-                            <img class="card-img-top" src="https://s3.us-east-2.amazonaws.com/shirt-atlas/kid-s.jpg" alt="Card image cap">
-                            <div class="card-body">
-                              <h5 class="card-title">Shirts for Kids</h5>
-                              <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                              
-                            </div>
-                 </div>                     
+                    </div>
+                    
+ 
+              </div>
+                {% endfor %}
+            
         </div>
         <hr>
+        <h2><span class="badge badge-warning">On Sale</span></h2>
+        <div class="row ">
+                {% for design in sale_designs %}
+                  <div class="col-md">
+    
+                        <div class="card">
+                            <h5 class="card-header">{{design.name}}</h5>
+                            <div class="card-body">
+                                    <img src="{% static design.display_image %}" class="img-thumbnail">
+                                    <hr>
+    
+                              <div class="float-right"><a href="/{{design.id}}" class="btn btn-primary btn-sm">View</a> <a href="#" class="btn btn-warning btn-sm">Buy</a>  </div> <h5 class="card-title"><span class="oldprice">${{design.price}}</span> <b>${{design.sale_price}}</b></h5>
+                             
+    
+                            </div>
+                        </div>
+                        
+     
+                  </div>
+                    {% endfor %}
+                
+            </div>
+<!--         <hr>
         <h2><span class="badge badge-warning">On Sale</span></h2>
 
         <div class="card-group">
@@ -187,7 +189,7 @@
                               
                             </div>
                  </div>                     
-        </div>
+        </div> -->
         <hr>
         <div class="row">
             <div class="col text-center">www.shirtatlas.com</div>
