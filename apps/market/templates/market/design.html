@@ -20,6 +20,10 @@
         padding: 5px;
         font-size:.8em;
     }
+
+    .oldprice {
+        text-decoration: line-through;
+    }
     </style>
 </head>
 <body>
@@ -93,8 +97,11 @@
                         <div class="card">
                             <h5 class="card-header">{{design.name}}</h5>
                             <div class="card-body">
-                              <h5 class="card-title">${{design.price}}</h5>
-                              
+                                {% if design.on_sale %}
+                                <h5 class="card-title"><span class="oldprice">${{design.price}}</span> <b>${{design.sale_price}}</b></h5>
+                                {% else %}
+                                <h5 class="card-title">${{design.price}}</h5>
+                                {% endif %}
                               <p class="card-text">{{design.desc}}</p>
                               <h6 class="card-title">Licenses Available: {{design.licenses}}</h6>
                               <hr>

@@ -295,6 +295,10 @@ class Design(models.Model):
         discount = self.price * Decimal(.9)
         return format(float(discount), '.2f')
 
+    def savings(self):
+        discount = self.price * Decimal(.1)
+        return format(float(discount), '.2f')
+
 
 class Order(models.Model):
     first_name = models.CharField(max_length=30)
