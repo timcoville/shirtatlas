@@ -1,7 +1,9 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib import messages
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from models import *
 
+states = ["AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE",  "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VT", "WA", "WI", "WV", "WY"]
 
 def index(request):
     context = {
@@ -29,7 +31,6 @@ def add_to_cart(request, design_id):
 
 def register(request):
     if request.method != 'POST':
-        states = ["AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE",  "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VT", "WA", "WI", "WV", "WY"]
         context = {'states': states}
         return render(request, "market/register.html", context)
     result = User.objects.create_user(request.POST)
@@ -115,12 +116,20 @@ def design(request, id):
 def portfolio(request, id):
     if not 'user_id' in request.session or not 'designer' in request.session:
         return redirect('/')
+    page = request.GET.get('page', 1)
+    results = Design.objects.filter(designer = User.objects.get(id = id)).order_by('-created_at')
+    paginator = Paginator(results, 4)
     
-    user = User.objects.get(id = id)
+    try:
+        designs = paginator.page(page)
+    except PageNotAnInteger:
+        designs = paginator.page(1)
+    except EmptyPage:
+        designs = paginator.page(paginator.num_pages)
     
-    designs = Design.objects.filter(designer = user).order_by('-created_at')
+
+
     context = {
-        'user': user,
         'designs': designs
     }
     return render(request, "market/designs.html", context)

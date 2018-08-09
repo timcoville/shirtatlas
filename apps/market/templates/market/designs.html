@@ -173,8 +173,34 @@
                         {% endfor %}
                     </tbody>
                   </table>
-           </div>
+                  
+                </div>
+       </div>
+       <div class="row justify-content-md-center">
+           <div class="col-2">
+                {% if designs.has_other_pages %}
+                <ul class="pagination">
+                    {% if designs.has_previous %}
+                    <li class="page-item"><a href="?page={{ designs.previous_page_number }}" class="page-link">&laquo;</a></li>
+                    {% else %}
+                    <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                    {% endif %}
+                    {% for i in designs.paginator.page_range %}
+                    {% if designs.number == i %}
+                        <li class="active page-item"><span><a href="?page={{ i }}" class="page-link">{{ i }}</a> <span class="sr-only">(current)</span></span></li>
+                    {% else %}
+                        <li lass="page-item"><a href="?page={{ i }}" class="page-link">{{ i }}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                    {% if designs.has_next %}
+                    <li class="page-item"><a href="?page={{ designs.next_page_number }}" class="page-link">&raquo;</a></li>
+                    {% else %}
+                    <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                    {% endif %}
+                </ul>
+                {% endif %}
 
+           </div>
        </div>
 
     </div>
