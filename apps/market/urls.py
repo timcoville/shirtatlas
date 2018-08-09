@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^editprofile$', views.editprofile),
     url(r'^editpassword$', views.editpassword),
     url(r'^newdesign$', views.newdesign),
+    url(r'^designs$', views.designs),
     url(r'^add/(?P<design_id>\d+)$', views.add_to_cart),
     url(r'^(?P<id>\d+)$', views.design),
     url(r'^portfolio/(?P<id>\d+)$', views.portfolio),

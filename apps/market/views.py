@@ -4,6 +4,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from models import *
 
 states = ["AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE",  "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VT", "WA", "WI", "WV", "WY"]
+cats = ["Tattoo style", "Bad Bones Crew", "Bikers", "Characters", "Heraldry",  "Holiday", "Photoshop", "Religious", "Skulls", "Sports", "Typography", "Urban", "Patterns", "Funny", "Art Style", "Comics", "Pop Culture", "Retro", "Sci-Fi", "Gym", "Abstract", "Anime", "Dogs", "Birds", "Cats", "Cool", "Fantasy", "Gaming", "Horror", "Monsters", "Music", "Zombies", "Cars", "Yoga", "Miscellaneous", "Nature", "Geek", "Camping", "Love", "Pregnancy", "Party", "Animals"]
 
 def index(request):
     context = {
@@ -28,6 +29,19 @@ def add_to_cart(request, design_id):
     cart.append(design.id)
     request.session['cart'] = cart
     return redirect('/')
+
+def designs(request):
+    category = request.GET.get('cat')
+    if category != None:
+        designs = Design.objects.filter(categories__contains = [category])
+    else:
+        designs = Design.objects.all()
+    context = {
+        'cats': cats,
+        'current_cat': request.GET.get('cat'),
+        'designs': designs
+    }
+    return render(request, "market/designs.html", context)
 
 def register(request):
     if request.method != 'POST':
@@ -90,7 +104,7 @@ def newdesign(request):
     if not 'user_id' in request.session or not 'designer' in request.session:
         return redirect('/')
     if request.method != 'POST':
-        return render(request, "market/newdesign.html")
+        return render(request, "market/newdesign.html", {'cats': cats})
     print(request.POST)
     result = Design.objects.upload_design(request.POST, request.FILES)
     if 'errors' in result:
@@ -116,6 +130,7 @@ def design(request, id):
 def portfolio(request, id):
     if not 'user_id' in request.session or not 'designer' in request.session:
         return redirect('/')
+
     page = request.GET.get('page', 1)
     results = Design.objects.filter(designer = User.objects.get(id = id)).order_by('-created_at')
     paginator = Paginator(results, 4)
@@ -127,12 +142,10 @@ def portfolio(request, id):
     except EmptyPage:
         designs = paginator.page(paginator.num_pages)
     
-
-
     context = {
         'designs': designs
     }
-    return render(request, "market/designs.html", context)
+    return render(request, "market/portfolio.html", context)
 
 def editdesign(request, user_id, design_id):
     if not 'user_id' in request.session or not 'designer' in request.session:
@@ -141,7 +154,8 @@ def editdesign(request, user_id, design_id):
         return redirect('/')
     if request.method != 'POST':
         context = {
-            'design' : Design.objects.get(id=design_id)
+            'design' : Design.objects.get(id=design_id),
+            'cats': cats
         }
         return render(request, "market/editdesign.html", context)
     result = Design.objects.edit_design(request.POST, request.FILES)
