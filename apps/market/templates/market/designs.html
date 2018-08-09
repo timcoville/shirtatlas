@@ -140,7 +140,11 @@
                                 <td><div class="test tower"><a href="/{{design.id}}"><img src="{% static design.display_image %}" class="img-thumbnail2"></a></div></td>
                                 <td>{{design.name}}</td>
                                 <td>{{design.licenses}}</td>
-                                <td>${{design.price}} = {{design.sale_price}}</td>
+                                {% if design.on_sale %}
+                                    <td>${{design.sale_price}}</td>
+                                {% else %}
+                                <td>${{design.price}}</td>
+                                {% endif %}
                                 <td>{{design.sales}}</td>
                                 <td>${{design.total_revenue}}</td>
                                 
