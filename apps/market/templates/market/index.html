@@ -38,7 +38,9 @@
     .oldprice {
         text-decoration: line-through;
     }
-   
+    form {
+        display:inline-block;
+    }
 
     </style>
 </head>
@@ -111,7 +113,7 @@
                                 <img src="{% static design.display_image %}" class="img-thumbnail">
                                 <hr>
 
-                          <div class="float-right"><a href="/{{design.id}}" class="btn btn-primary btn-sm">View</a> <a href="#" class="btn btn-warning btn-sm">Buy</a>  </div> <h5 class="card-title"><b>${{design.price}}</b></h5>
+                          <div class="float-right"><a href="/{{design.id}}" class="btn btn-primary btn-sm">View</a> <form action="add/{{design.id}}" method="POST">{% csrf_token %}<input type="hidden" name="refURL" value="{{request.path}}?{{request.META.QUERY_STRING}}"><button class="btn btn-warning btn-sm">Buy</button> </form>   </div> <h5 class="card-title"><b>${{design.price}}</b></h5>
                          
 
                         </div>
@@ -134,7 +136,7 @@
                                     <img src="{% static design.display_image %}" class="img-thumbnail">
                                     <hr>
     
-                              <div class="float-right"><a href="/{{design.id}}" class="btn btn-primary btn-sm">View</a> <a href="#" class="btn btn-warning btn-sm">Buy</a>  </div> <h5 class="card-title"><span class="oldprice">${{design.price}}</span> <b>${{design.sale_price}}</b></h5>
+                              <div class="float-right"><a href="/{{design.id}}" class="btn btn-primary btn-sm">View</a> <form action="add/{{design.id}}" method="POST">{% csrf_token %}<input type="hidden" name="refURL" value="{{request.path}}?{{request.META.QUERY_STRING}}"><button class="btn btn-warning btn-sm">Buy</button> </form>   </div> <h5 class="card-title"><span class="oldprice">${{design.price}}</span> <b>${{design.sale_price}}</b></h5>
                              
     
                             </div>

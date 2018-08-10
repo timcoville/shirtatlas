@@ -27,6 +27,9 @@
     .reduce {
         font-size: .6em;
     }
+    form {
+        display:inline-block;
+    }
     </style>
 </head>
 <body>
@@ -141,7 +144,7 @@
                               {% if design.designer.id == request.session.user_id %}
                               <a href="/portfolio/{{request.session.user_id}}/edit/{{design.id}}" class="btn btn-secondary">Edit Design</a>
                               {% else %}
-                              <a href="#" class="btn btn-primary">Add to Cart</a>  
+                              <form action="add/{{design.id}}" method="POST">{% csrf_token %}<input type="hidden" name="refURL" value="{{request.path}}?{{request.META.QUERY_STRING}}"><button class="btn btn-warning btn-sm">Buy</button> </form> 
                               {% endif %}
                             </div>
                         </div>
