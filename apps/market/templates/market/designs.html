@@ -115,7 +115,7 @@
                                     {% for c in cats %}
                                         {% if current_cat is not iterable %}
                                                 {% if c in current_cat %}
-                                                    <button type="button" id="test123" class="btn btn-primary btn-sm reduce wegweg">{{c}} </button>
+                                                    <button type="button" id="test123" class="btn btn-primary btn-sm reduce wegweg">{{c}}</button>
                                                 {% else %}
                                                     <button type="button" id="test123" class="btn btn-secondary btn-sm reduce wegweg">{{c}}</button>
                                                 {% endif %}
@@ -130,18 +130,7 @@
                                          {% endif %}   
                                     {% endfor %}
 
-<!--                                     {% if current_cat %}
-                                    <a href="/designs"><button type="button" id="test123" class="btn btn-secondary btn-sm reduce">All</button></a>
-                                    {% else %}
-                                    <a href="/designs"><button type="button" id="test123" class="btn btn-primary btn-sm reduce">All</button></a>
-                                    {% endif %}
-                                    {% for c in cats %}
-                                        {% if current_cat == c %}
-                                            <a href="?cat={{c}}"><button type="button" id="test123" class="btn btn-primary btn-sm reduce">{{c}}</button></a>
-                                        {% else %}
-                                            <a href="?cat={{c}}"><button type="button" id="test123" class="btn btn-secondary btn-sm reduce">{{c}}</button></a>
-                                        {% endif %}
-                                    {% endfor %} -->
+
                                     <hr>
                             </div>
                         </div>
@@ -223,20 +212,61 @@
                 
                 $(document.body).on('click', '#test123', function(){
                     var string = $(this).html()
-                    console.log(string)
-                    var url = location.href                    
-                    if (url.indexOf('?') == -1){
-                        query = "?cat=" + string
-                        url += query
-                        console.log(url)
-                    } else if(url.indexOf(string) > -1) {
-                        console.log(url)
-                    } else {
-                        url += "+" + string
-                        console.log(url)
-                        document.location = url
-                    }
+                    var url = location.href        
+                    var TheAnchor = null;
+                    var newAdditionalURL = "";
+                    var tempArray = url.split("?");
+                    var baseURL = tempArray[0];
+                    var additionalURL = tempArray[1];
+                    var temp = "";
+                    //breaking down old query params for tags
+                    if (additionalURL){
+                        var tmpAnchor = additionalURL.split("=");
+                        var TheKey = tmpAnchor[0];
+                            TheVals = tmpAnchor[1];
+                        if (TheVals.indexOf('+') > -1){
+                            valList = TheVals.split("+")
+                        } else {
+                            valList = [TheVals]
+                        }
+                        console.log(valList)
+                        //adding or removing query params for tags
+                        if (valList.indexOf(string) > -1){
+                            console.log(valList.indexOf(string))
+                            valList.splice(valList.indexOf(string), 1)
+                            console.log(valList)
+                        } else {
+                            valList.push(string)
+                            console.log(valList)
+                        }
 
+                        //rebuilding url with new params
+                        if (valList.length == 0){
+                            console.log(baseURL)
+                            document.location = baseURL
+                        } else if (valList.length > 1){
+                            newQuery = "?" + TheKey + "=" + valList[0]
+                            for(var x=1; x < valList.length; x++){
+                                newQuery += "+" + valList[x]
+                            }
+                            console.log(newQuery)
+                            console.log(baseURL + newQuery)    
+                            newURL = baseURL = newQuery
+                            document.location = newURL
+                        } else {
+                            newQuery = "?" + TheKey + "=" + valList[0]
+                            console.log(baseURL + newQuery)
+                            newURL = baseURL = newQuery
+                            document.location = newURL
+                        }
+                        
+                        }
+
+
+
+
+
+  
 
                 })
                     
