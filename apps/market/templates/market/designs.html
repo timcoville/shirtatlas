@@ -157,7 +157,7 @@
                      <ul class="pagination">
                          {% if designs.has_previous %}
                             {% if current_cat %}
-                                <li class="page-item"><a href="?cat={{current_cat}}&amp;page={{ designs.previous_page_number }}" class="page-link">&laquo;</a></li>
+                                <li class="page-item"><a href="?cat={{string_url}}&amp;page={{ designs.previous_page_number }}" class="page-link">&laquo;</a></li>
                             {% else %}
                                 <li class="page-item"><a href="?page={{ designs.previous_page_number }}" class="page-link">&laquo;</a></li>
                             {% endif %}
@@ -167,10 +167,10 @@
                          {% endif %}
                          {% for i in designs.paginator.page_range %}
                          {% if designs.number == i %}
-                             <li class="active page-item"><span><a href="?cat={{current_cat}}&amp;page={{ i }}" class="page-link">{{ i }}</a> <span class="sr-only">(current)</span></span></li>
+                             <li class="active page-item"><span><a href="?cat={{string_url}}&amp;page={{ i }}" class="page-link">{{ i }}</a> <span class="sr-only">(current)</span></span></li>
                          {% else %}
                              {% if current_cat %}
-                                <li lass="page-item"><a href="?cat={{current_cat}}&amp;page={{ i }}" class="page-link">{{ i }}</a></li>
+                                <li lass="page-item"><a href="?cat={{string_url}}&amp;page={{ i }}" class="page-link">{{ i }}</a></li>
                              {% else %}
                                 <li lass="page-item"><a href="?page={{ i }}" class="page-link">{{ i }}</a></li>
                              {% endif %}
@@ -178,7 +178,7 @@
                          {% endfor %}
                          {% if designs.has_next %}
                             {% if current_cat %}
-                                <li class="page-item"><a href="?cat={{current_cat}}&amp;page={{ designs.next_page_number }}" class="page-link">&raquo;</a></li>
+                                <li class="page-item"><a href="?cat={{string_url}}&amp;page={{ designs.next_page_number }}" class="page-link">&raquo;</a></li>
                             {% else %}
                                 <li class="page-item"><a href="?page={{ designs.next_page_number }}" class="page-link">&raquo;</a></li>
                             {% endif %}
@@ -212,13 +212,22 @@
                 
                 $(document.body).on('click', '#test123', function(){
                     var string = $(this).html()
-                    var url = location.href        
-                    var TheAnchor = null;
-                    var newAdditionalURL = "";
+                    var url = location.href
+                    page = false     
+                    if (url.indexOf('page') > -1){
+                        page = url.slice(url.indexOf('page')-1)
+                        url = url.slice(0,url.indexOf('page')-1)
+                        page = page.slice(1)
+                    }
+                    
+                    
+
+
                     var tempArray = url.split("?");
                     var baseURL = tempArray[0];
                     var additionalURL = tempArray[1];
-                    var temp = "";
+
+
                     //breaking down old query params for tags
                     if (additionalURL){
                         var tmpAnchor = additionalURL.split("=");
@@ -230,6 +239,12 @@
                             valList = [TheVals]
                         }
                         console.log(valList)
+                    } else {
+                        TheKey = "cat"
+                        valList = []
+                    }
+
+                    if(string != "All"){
                         //adding or removing query params for tags
                         if (valList.indexOf(string) > -1){
                             console.log(valList.indexOf(string))
@@ -241,26 +256,31 @@
                         }
 
                         //rebuilding url with new params
-                        if (valList.length == 0){
-                            console.log(baseURL)
-                            document.location = baseURL
-                        } else if (valList.length > 1){
+                        if (valList.length > 1){
                             newQuery = "?" + TheKey + "=" + valList[0]
                             for(var x=1; x < valList.length; x++){
                                 newQuery += "+" + valList[x]
                             }
                             console.log(newQuery)
                             console.log(baseURL + newQuery)    
-                            newURL = baseURL = newQuery
+                            newURL = baseURL + newQuery
+                            if (page){
+                                newURL += "&" + page
+                            }
                             document.location = newURL
                         } else {
                             newQuery = "?" + TheKey + "=" + valList[0]
                             console.log(baseURL + newQuery)
-                            newURL = baseURL = newQuery
+                            newURL = baseURL + newQuery
+                            if (page){
+                                newURL += "&" + page
+                            }
                             document.location = newURL
                         }
+                    } else {
+                        document.location = baseURL
+                    }
                         
-                        }
 
 
 

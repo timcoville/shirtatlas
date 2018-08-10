@@ -4,7 +4,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from models import *
 
 states = ["AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE",  "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VT", "WA", "WI", "WV", "WY"]
-cats = ["Tattoo style", "Bad Bones Crew", "Bikers", "Characters", "Heraldry",  "Holiday", "Photoshop", "Religious", "Skulls", "Sports", "Typography", "Urban", "Patterns", "Funny", "Art Style", "Comics", "Pop Culture", "Retro", "Sci-Fi", "Gym", "Abstract", "Anime", "Dogs", "Birds", "Cats", "Cool", "Fantasy", "Gaming", "Horror", "Monsters", "Music", "Zombies", "Cars", "Yoga", "Miscellaneous", "Nature", "Geek", "Camping", "Love", "Pregnancy", "Party", "Animals"]
+cats = ["Tattoo", "Bikers", "Characters", "Heraldry",  "Holiday", "Photoshop", "Religious", "Skulls", "Sports", "Typography", "Urban", "Patterns", "Funny", "Artistic", "Comics", "Pop Culture", "Retro", "Sci-Fi", "Gym", "Abstract", "Anime", "Dogs", "Birds", "Cats", "Cool", "Fantasy", "Gaming", "Horror", "Monsters", "Music", "Zombies", "Cars", "Yoga", "Miscellaneous", "Nature", "Geek", "Camping", "Love", "Pregnancy", "Party", "Animals"]
 
 def index(request):
     context = {
@@ -32,10 +32,11 @@ def add_to_cart(request, design_id):
 
 def designs(request):
     category = request.GET.get('cat')
-    print(category)
+    
     
     if category != None and ' ' in category:
         category = category.split(' ')
+        
 
     if category != None:
         if type(category) == list:
@@ -56,12 +57,24 @@ def designs(request):
     except EmptyPage:
         designs = paginator.page(paginator.num_pages)
 
-
+    page_string = ""
+    if type(category) == list:
+        for index, catString in enumerate(category):
+            print(index)
+            print(len(category))
+            if len(category)-1 == index:
+                page_string += catString
+            else:    
+                page_string += catString + "+"
+    else:
+        page_string = category
+    print(page_string)
 
     context = {
         'cats': cats,
         'current_cat': category,
-        'designs': designs
+        'designs': designs,
+        'string_url': page_string
     }
     return render(request, "market/designs.html", context)
 
