@@ -24,6 +24,9 @@
     .oldprice {
         text-decoration: line-through;
     }
+    .reduce {
+        font-size: .6em;
+    }
     </style>
 </head>
 <body>
@@ -80,13 +83,43 @@
         </nav>
         <hr>
     <div class="container-fluid">
+            <div class="row">
+                    <div class="col">
+                            {% if current_cat %}
+                            <button type="button" id="test123" class="btn btn-secondary btn-sm reduce">All</button>
+                            {% else %}
+                            <button type="button" id="test123" class="btn btn-primary btn-sm reduce">All</button>
+                            {% endif %}
+                            {% for c in cats %}
+                                {% if current_cat is not iterable %}
+                                        {% if c in current_cat %}
+                                            <button type="button" id="test123" class="btn btn-primary btn-sm reduce wegweg">{{c}}</button>
+                                        {% else %}
+                                            <button type="button" id="test123" class="btn btn-secondary btn-sm reduce wegweg">{{c}}</button>
+                                        {% endif %}
+
+                                {% else %}
+                                    {% if current_cat == c %}
+                                        <button type="button" id="test123" class="btn btn-primary btn-sm reduce ttt">{{c}}</button>
+                                    {% else %}
+                                        <button type="button" id="test123" class="btn btn-secondary btn-sm reduce ttt">{{c}}</button>
+                                    {% endif %}
+
+                                 {% endif %}   
+                            {% endfor %}
+
+
+                            <hr>
+                    </div>
+                </div>
        <div class="row">
-            <div class="col-md-10 order-md-2">
-                <div class="row">
+            
+                
                         
                     <div class="col-sm-4">
                         <img src="{% static design.display_image %}" class="img-thumbnail">
                     </div>
+
                     <div class="col-sm-8">
                             
                             {% if design.paused and design.designer.id == request.session.user_id %}
@@ -111,34 +144,13 @@
                               <a href="#" class="btn btn-primary">Add to Cart</a>  
                               {% endif %}
                             </div>
-                          </div>
-                          <br>
+                        </div>
+                        <br>
                     </div>
-                  </div>
+                
                     
                     
-                </div>  
-           <div class="col-md-2">
-               <h5>Categories</h5>
-                <ul class="list-group list-group-flush" id="cat-list">
-                    <li class="list-group-item list-group-item-action"><a href="/tattoo">Tattoo</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/heraldy">Heraldry</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/holidays">Holiday</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/religious">Religious</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/sports">Sports</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/funny">Funny</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/artistic">Artistic</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/comics">Comics</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/retro">Retro</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/sci-fi">Sci-Fi</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/anime">Anime</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/animals">Animals</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/cars">Cars</a></li>
-                    <li class="list-group-item list-group-item-action"><a href="/cars">Patriotic</a></li>
-                </ul>
-          
-               
-           </div>
+                
 
        </div>
        
@@ -155,6 +167,8 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+    <script>
 
+    </script>
 </body>
 </html>

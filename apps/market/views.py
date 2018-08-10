@@ -157,7 +157,8 @@ def design(request, id):
     design = Design.objects.get(id=id)
 
     context = {
-        'design': design
+        'design': design,
+        'cats': cats
         }
     return render(request, "market/design.html", context)
 
