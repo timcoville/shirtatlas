@@ -23,26 +23,7 @@ def index2(request):
     print(query)
     return render(request, "market/index.html")
 
-def add_to_cart(request, design_id, route):
-    print(route)
-
-    try:
-        design = Design.objects.get(id=design_id)
-    except:
-        return redirect('/')
-    if not 'cart' in request.session:
-        request.session['cart'] = []
-    cart = request.session['cart']
-    cart.append(design.id)
-    request.session['cart'] = cart
-    if route == 'designs':
-        return redirect('/designs')
-    if route == 'home':
-        return redirect('/')
-    if route == 'design':
-        return redirect('/'+design_id)
-
-def add_to_cart2(request, design_id):
+def add_to_cart(request, design_id):
     try:
         design = Design.objects.get(id=design_id)
     except:
