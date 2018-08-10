@@ -10,11 +10,14 @@ urlpatterns = [
     url(r'^editpassword$', views.editpassword),
     url(r'^newdesign$', views.newdesign),
     url(r'^designs$', views.designs),
-    url(r'^add/(?P<design_id>\d+)$', views.add_to_cart),
+    url(r'^home/add/(?P<design_id>\d+)$', views.add_to_cart, {'route': 'home'}),
+    url(r'^designs/add/(?P<design_id>\d+)$', views.add_to_cart, {'route': 'designs'}),
+    url(r'^design/add/(?P<design_id>\d+)$', views.add_to_cart, {'route': 'design'}),
     url(r'^(?P<id>\d+)$', views.design),
     url(r'^portfolio/(?P<id>\d+)$', views.portfolio),
-    url(r'^portfolio/(?P<user_id>\d+)/edit/(?P<design_id>\d+$)$', views.editdesign),
-    url(r'^portfolio/(?P<user_id>\d+)/pause/(?P<design_id>\d+$)$', views.pause),
-    url(r'^portfolio/(?P<user_id>\d+)/sale/(?P<design_id>\d+$)$', views.sale),
-    url(r'^portfolio/(?P<user_id>\d+)/delete/(?P<design_id>\d+$)$', views.delete)
+    url(r'^portfolio/(?P<user_id>\d+)/edit/(?P<design_id>\d+)$', views.editdesign),
+    url(r'^portfolio/(?P<user_id>\d+)/pause/(?P<design_id>\d+)$', views.pause),
+    url(r'^portfolio/(?P<user_id>\d+)/sale/(?P<design_id>\d+)$', views.sale),
+    url(r'^portfolio/(?P<user_id>\d+)/delete/(?P<design_id>\d+)$', views.delete),
+    url(r'add/(?P<design_id>\d+)$', views.add_to_cart2)
 ]

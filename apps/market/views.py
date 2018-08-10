@@ -1,7 +1,12 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 from models import *
+
+
+
+
 
 states = ["AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE",  "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VT", "WA", "WI", "WV", "WY"]
 cats = ["Tattoo", "Bikers", "Characters", "Heraldry",  "Holiday", "Photoshop", "Religious", "Skulls", "Sports", "Typography", "Urban", "Patterns", "Funny", "Artistic", "Comics", "Pop Culture", "Retro", "Sci-Fi", "Gym", "Abstract", "Anime", "Dogs", "Birds", "Cats", "Cool", "Fantasy", "Gaming", "Horror", "Monsters", "Music", "Zombies", "Cars", "Yoga", "Miscellaneous", "Nature", "Geek", "Camping", "Love", "Pregnancy", "Party", "Animals"]
@@ -18,7 +23,9 @@ def index2(request):
     print(query)
     return render(request, "market/index.html")
 
-def add_to_cart(request, design_id):
+def add_to_cart(request, design_id, route):
+    print(route)
+
     try:
         design = Design.objects.get(id=design_id)
     except:
@@ -28,7 +35,26 @@ def add_to_cart(request, design_id):
     cart = request.session['cart']
     cart.append(design.id)
     request.session['cart'] = cart
-    return redirect('/')
+    if route == 'designs':
+        return redirect('/designs')
+    if route == 'home':
+        return redirect('/')
+    if route == 'design':
+        return redirect('/'+design_id)
+
+def add_to_cart2(request, design_id):
+    try:
+        design = Design.objects.get(id=design_id)
+    except:
+        return redirect('/')
+    if not 'cart' in request.session:
+        request.session['cart'] = []
+    cart = request.session['cart']
+    cart.append(design.id)
+    request.session['cart'] = cart
+    url = request.POST['refURL']
+    return redirect(url)
+    
 
 def designs(request):
     category = request.GET.get('cat')
