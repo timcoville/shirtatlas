@@ -75,7 +75,7 @@
                     </li> 
                     {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Cart (0)</a>
+                            <a class="nav-link" href="/">Cart ({{request.session.cart | length}})</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/">Checkout</a>
@@ -86,35 +86,7 @@
         </nav>
         <hr>
     <div class="container-fluid">
-            <div class="row">
-                    <div class="col">
-                            {% if current_cat %}
-                            <button type="button" id="test123" class="btn btn-secondary btn-sm reduce">All</button>
-                            {% else %}
-                            <button type="button" id="test123" class="btn btn-primary btn-sm reduce">All</button>
-                            {% endif %}
-                            {% for c in cats %}
-                                {% if current_cat is not iterable %}
-                                        {% if c in current_cat %}
-                                            <button type="button" id="test123" class="btn btn-primary btn-sm reduce wegweg">{{c}}</button>
-                                        {% else %}
-                                            <button type="button" id="test123" class="btn btn-secondary btn-sm reduce wegweg">{{c}}</button>
-                                        {% endif %}
-
-                                {% else %}
-                                    {% if current_cat == c %}
-                                        <button type="button" id="test123" class="btn btn-primary btn-sm reduce ttt">{{c}}</button>
-                                    {% else %}
-                                        <button type="button" id="test123" class="btn btn-secondary btn-sm reduce ttt">{{c}}</button>
-                                    {% endif %}
-
-                                 {% endif %}   
-                            {% endfor %}
-
-
-                            <hr>
-                    </div>
-                </div>
+          
        <div class="row">
             
                 
@@ -149,6 +121,7 @@
                             </div>
                         </div>
                         <br>
+                        <a href="{{request.META.HTTP_REFERER}}" class="btn btn-secondary">Go Back</a>
                     </div>
                 
                     
