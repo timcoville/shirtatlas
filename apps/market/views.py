@@ -32,11 +32,19 @@ def add_to_cart(request, design_id):
 
 def designs(request):
     category = request.GET.get('cat')
+    print(category)
+    
+    if category != None and ' ' in category:
+        category = category.split(' ')
+
     if category != None:
-        results = Design.objects.filter(categories__contains = [category])
+        if type(category) == list:
+            results = Design.objects.filter(categories__overlap = category)
+        else:
+            results = Design.objects.filter(categories__contains = [category])
     else:
         results = Design.objects.all()
-
+    print(results)
     page = request.GET.get('page', 1)
     
     paginator = Paginator(results, 4)
@@ -134,8 +142,7 @@ def newdesign(request):
 
 def design(request, id):
     design = Design.objects.get(id=id)
-    if design.paused:
-        return redirect('/')
+
     context = {
         'design': design
         }
