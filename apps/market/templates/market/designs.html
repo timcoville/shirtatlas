@@ -254,9 +254,9 @@
                             valList.push(string)
                             console.log(valList)
                         }
-
+                        
                         //rebuilding url with new params
-                        if (valList.length > 1){
+                        if (valList.length > 0){
                             newQuery = "?" + TheKey + "=" + valList[0]
                             for(var x=1; x < valList.length; x++){
                                 newQuery += "+" + valList[x]
@@ -269,13 +269,7 @@
                             }
                             document.location = newURL
                         } else {
-                            newQuery = "?" + TheKey + "=" + valList[0]
-                            console.log(baseURL + newQuery)
-                            newURL = baseURL + newQuery
-                            if (page){
-                                newURL += "&" + page
-                            }
-                            document.location = newURL
+                            document.location = baseURL
                         }
                     } else {
                         document.location = baseURL
