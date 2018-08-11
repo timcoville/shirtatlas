@@ -23,6 +23,23 @@ def index2(request):
     print(query)
     return render(request, "market/index.html")
 
+
+def cart(request):
+    if not 'cart' in request.session:
+        request.session['cart'] = []
+    results = []
+    cart_price = 0
+    for id in request.session['cart']:
+        design = Design.objects.get(id=id)
+        cart_price += design.price
+        results.append(design)
+    print(results)
+    print(cart_price)
+    context = {
+        'designs': results
+    }
+    return render(request, "market/cart.html", context)
+
 def add_to_cart(request, design_id):
     try:
         design = Design.objects.get(id=design_id)
@@ -33,7 +50,12 @@ def add_to_cart(request, design_id):
     cart = request.session['cart']
     cart.append(design.id)
     request.session['cart'] = cart
+    
     url = request.POST['refURL']
+    print(url[len(url)-1])
+    if url[len(url)-1] == '?':
+        url = url.replace('?',"")
+    print(url)
     return redirect(url)
     
 
