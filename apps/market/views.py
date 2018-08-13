@@ -33,10 +33,10 @@ def cart(request):
         design = Design.objects.get(id=id)
         cart_price += design.price
         results.append(design)
-    print(results)
-    print(cart_price)
+
     context = {
-        'designs': results
+        'designs': results,
+        'cart_total': cart_price
     }
     return render(request, "market/cart.html", context)
 

@@ -156,11 +156,21 @@
                                          </td>
                                      </tr>
                                  {% endfor %}
+                                     <tr>
+                                         <td></td>
+                                         <td></td>
+                                         <td>Number of Designs: {{designs | length}}</td>
+                                         <td>
+                                             ${{cart_total}}
+                                         </td>
+                                         <td><a hrf="/checkout"><button  class="btn btn-primary">Checkout</button></a></td>
+                                     </tr>
                              </tbody>
                            </table>
                            
-                         </div>
+                        </div>
                 </div>
+                
 
         <hr>
         <div class="row">
