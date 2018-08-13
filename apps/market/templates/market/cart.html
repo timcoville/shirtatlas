@@ -62,6 +62,9 @@
                 max-width: 100%;
                 height: auto;
             }
+            form {
+               display:inline-block;
+            }
             
             </style>
 
@@ -125,10 +128,8 @@
                                <tr>
                                  <th scope="col">Design</th>
                                  <th scope="col">Name</th>
-                                 <th scope="col">Licenses</th>
+                                 <th scope="col">Description</th>
                                  <th scope="col">Price</th>
-                                 <th scope="col">Orders</th>
-                                 <th scope="col">Revenue</th>
                                  <th scope="col">Actions</th>
                                </tr>
                              </thead>
@@ -138,35 +139,20 @@
                                          
                                          <td><div class="test tower"><a href="/{{design.id}}"><img src="{% static design.display_image %}" class="img-thumbnail2"></a></div></td>
                                          <td>{{design.name}}</td>
-                                         <td>{{design.licenses}}</td>
+                                         <td>{{design.desc}}</td>
                                          {% if design.on_sale %}
                                              <td>${{design.sale_price}}</td>
                                          {% else %}
                                          <td>${{design.price}}</td>
                                          {% endif %}
-                                         <td>{{design.sales}}</td>
-                                         <td>${{design.total_revenue}}</td>
+
                                          
                                          
                                          <td>    
                                                  <a href="/{{design.id}}">
-                                                     <button type="button" class="btn btn-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="top" data-content="View how your listing looks to the public." data-trigger="hover">View</button></a>
-                                                 <a href="/portfolio/{{request.session.user_id}}/edit/{{design.id}}">
-                                                     <button type="button" class="btn btn-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="top" data-content="Edit the design, add more licenses or delete listing completely." data-trigger="hover">Edit</button></a>
-                                                 {% if design.paused %}    
-                                                 <a href="/portfolio/{{request.session.user_id}}/pause/{{design.id}}">
-                                                     <button type="button" class="btn btn-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="top" data-content="Unpause to sell again and add to public listings." data-trigger="hover">Unpause</button></a>
-                                                 {% else %}      
-                                                 <a href="/portfolio/{{request.session.user_id}}/pause/{{design.id}}">
-                                                     <button type="button" class="btn btn-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="top" data-content="Pause sales and temporarily remove from public listings." data-trigger="hover">Pause</button></a>
-                                                 {% endif %}
-                                                 {% if design.on_sale %}    
-                                                 <a href="/portfolio/{{request.session.user_id}}/sale/{{design.id}}">
-                                                     <button type="button" class="btn btn-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="top" data-content="Remove 10% discount and list at regular price." data-trigger="hover">Remove Discount</button></a>
-                                                 {% else %}      
-                                                 <a href="/portfolio/{{request.session.user_id}}/sale/{{design.id}}">
-                                                     <button type="button" class="btn btn-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="top" data-content="Put this item on sale, we apply a 10% discount based on the list price." data-trigger="hover">Discount</button></a>
-                                                 {% endif %}
+                                                     <button type="button" class="btn btn-secondary btn-sm">View</button></a>
+                                                     <form action="/remove/{{design.id}}" method="POST">{% csrf_token %}<input type="hidden" name="refURL" value="{{request.path}}?{{request.META.QUERY_STRING}}"><button class="btn btn-secondary btn-sm">Remove</button> </form> 
+                                                 
                                          </td>
                                      </tr>
                                  {% endfor %}
