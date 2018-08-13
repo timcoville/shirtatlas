@@ -65,7 +65,10 @@
             form {
                display:inline-block;
             }
-            
+            .oldprice {
+                text-decoration: line-through;
+            }
+                    
             </style>
 
 </head>
@@ -121,8 +124,24 @@
             </div>
         </nav>
         <div class="container-fluid">
+            <hr>
+                {% if messages %}
+            <div class="alert alert-danger" role="alert">
+            {% for message in messages %}
+                <p class="text-monospace small" style="margin-bottom:0px;">{{ forloop.counter }}) {{message}} </p>
+            {% endfor %}
+            </div>
+            <hr>
+        {% endif %}
+        {% if cart_empty %}
+            <div class="alert alert-info" role="alert">
+                <p class="text-monospace small" style="margin-bottom:0px;">Your basket is empty, take a look at some of <a href="/designs">our designs.</a></p>
+            </div>
+        {% endif %}
                 <div class="row">
+                    
                      <div class="col">
+                         
                          <table class="table table-hover table-light">
                              <thead>
                                <tr>

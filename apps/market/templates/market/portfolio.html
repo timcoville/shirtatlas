@@ -34,13 +34,9 @@
      text-align: center;
     }
 
-/*     img {
-        max-width:125px;
-        max-height:125px;
-        width: auto;
-        height: auto;
-        overflow: hidden;
-    } */
+    .oldprice {
+        text-decoration: line-through;
+    }
 
     .test {
         overflow: hidden;
@@ -140,7 +136,7 @@
                                 <td>{{design.name}}</td>
                                 <td>{{design.licenses}}</td>
                                 {% if design.on_sale %}
-                                    <td>${{design.sale_price}}</td>
+                                    <td><span class="oldprice">${{design.price}}</span> ${{design.sale_price}}</td>
                                 {% else %}
                                 <td>${{design.price}}</td>
                                 {% endif %}

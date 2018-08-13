@@ -304,15 +304,21 @@ class Design(models.Model):
 
 
 class Order(models.Model):
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    street = models.CharField(max_length=255)
-    city = models.CharField(max_length=255)
-    state = models.CharField(max_length=2)
-    zip_code = models.CharField(max_length=5)
     order_cost = models.DecimalField(max_digits=6, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     buyer = models.ForeignKey(User, related_name="user_purchases")
-    products = models.ManyToManyField(Design, related_name="products_ordered")
+
+
+class OrderDetails(models.Model):
+    charged_price = models.DecimalField(max_digits=5, decimal_places=2, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    design = models.ForeignKey(Design, related_name="design_orders")
+    order = models.ForeignKey(Order, related_name="order_basket")
+    
+
+
+
+    
     

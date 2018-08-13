@@ -17,7 +17,6 @@ states = ["AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI"
 cats = ["Tattoo", "Bikers", "Characters", "Heraldry",  "Holiday", "Photoshop", "Religious", "Skulls", "Sports", "Typography", "Urban", "Patterns", "Funny", "Artistic", "Comics", "Retro", "Sci-Fi", "Gym", "Abstract", "Anime", "Dogs", "Birds", "Cats", "Cool", "Fantasy", "Gaming", "Horror", "Monsters", "Music", "Zombies", "Cars", "Yoga", "Miscellaneous", "Nature", "Geek", "Camping", "Love", "Pregnancy", "Party", "Animals"]
 
 def index(request):
-    print(os.environ.get('STRIPE_PRIVATE_KEY'))
     context = {
         'new_designs': Design.objects.filter(paused = False).exclude(on_sale = True).order_by('-id')[:5],
         'sale_designs': Design.objects.filter(on_sale = True).order_by('-id')[:5],
@@ -49,10 +48,13 @@ def cart(request):
             else:
                 cart_price += design.price
             results.append(design)
-    print(cart_price)
+        
+    if len(results) == 0:
+        cart_empty = True
     context = {
         'designs': results,
-        'cart_total': cart_price
+        'cart_total': cart_price,
+        'cart_empty': cart_empty
     }
     return render(request, "market/cart.html", context)
 
