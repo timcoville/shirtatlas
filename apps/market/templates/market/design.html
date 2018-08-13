@@ -127,9 +127,8 @@
                         </div>
                         <br>
                         {% if messages %}
-                        
                             {% for message in messages %}
-                                <a href="{{message}}" class="btn btn-secondary">Go Back</a> wegwe
+                                <a href="{{message}}" class="btn btn-secondary">Go Back</a>
                             {% endfor %}
                         {% else %}
                         <a href="{{request.META.HTTP_REFERER}}" class="btn btn-secondary">Go Back</a>
