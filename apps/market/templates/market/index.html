@@ -97,7 +97,14 @@
         </nav>
     <div class="container-fluid">
         <hr>
-          
+        {% if messages %}
+        <div class="alert alert-danger" role="alert">
+        {% for message in messages %}
+            <p class="text-monospace small" style="margin-bottom:0px;">{{message}} </p>
+        {% endfor %}
+        </div>
+        <hr>
+        {% endif %}
         <h2><span class="badge badge-success" >New Arrivals</span> </h2>
 
 

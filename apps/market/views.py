@@ -41,6 +41,8 @@ def cart(request):
     return render(request, "market/cart.html", context)
 
 def add_to_cart(request, design_id):
+    if 'backURL' in request.POST:
+        messages.info(request, request.POST['backURL'])
     try:
         design = Design.objects.get(id=design_id)
     except:
@@ -48,16 +50,42 @@ def add_to_cart(request, design_id):
     if not 'cart' in request.session:
         request.session['cart'] = []
     cart = request.session['cart']
-    cart.append(design.id)
-    request.session['cart'] = cart
-    
     url = request.POST['refURL']
     print(url[len(url)-1])
     if url[len(url)-1] == '?':
         url = url.replace('?',"")
-    print(url)
+    
+    if design.id in cart:
+        messages.error(request, "Design already added to cart!")
+        return redirect(url)
+    else:
+        cart.append(design.id)
+        request.session['cart'] = cart
+        return redirect(url)
+
+def remove_from_cart(request, design_id):
+    if 'backURL' in request.POST:
+        messages.info(request, request.POST['backURL'])
+
+    url = request.POST['refURL']
+    if url[len(url)-1] == '?':
+        url = url.replace('?',"")
+    cart = request.session['cart']
+    if not int(design_id) in cart:
+        print('working')
+        url = request.POST['refURL']
+        return redirect(url)
+
+    del cart[cart.index(int(design_id))]
+    request.session['cart'] = cart
+    
+    
     return redirect(url)
     
+    
+
+
+
 
 def designs(request):
     category = request.GET.get('cat')

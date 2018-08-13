@@ -86,7 +86,7 @@
         </nav>
         <hr>
     <div class="container-fluid">
-          
+       
        <div class="row">
             
                 
@@ -116,12 +116,24 @@
                               {% if design.designer.id == request.session.user_id %}
                               <a href="/portfolio/{{request.session.user_id}}/edit/{{design.id}}" class="btn btn-secondary">Edit Design</a>
                               {% else %}
-                              <form action="add/{{design.id}}" method="POST">{% csrf_token %}<input type="hidden" name="refURL" value="{{request.path}}?{{request.META.QUERY_STRING}}"><button class="btn btn-warning btn-sm">Buy</button> </form> 
+                                {% if design.id in request.session.cart %}
+                                <a href="/checkout" class="btn btn-primary btn-sm">Checkout</a> 
+                                <form action="/remove/{{design.id}}" method="POST">{% csrf_token %}<input type="hidden" name="refURL" value="{{request.path}}?{{request.META.QUERY_STRING}}"><input type="hidden" name="backURL" value="{{request.META.HTTP_REFERER}}"><button class="btn btn-secondary btn-sm">Remove from Cart</button> </form> 
+                                {% else %}
+                                <form action="/add/{{design.id}}" method="POST">{% csrf_token %}<input type="hidden" name="refURL" value="{{request.path}}?{{request.META.QUERY_STRING}}"><input type="hidden" name="backURL" value="{{request.META.HTTP_REFERER}}"><button class="btn btn-warning btn-sm">Buy</button> </form> 
+                                {% endif %}
                               {% endif %}
                             </div>
                         </div>
                         <br>
+                        {% if messages %}
+                        
+                            {% for message in messages %}
+                                <a href="{{message}}" class="btn btn-secondary">Go Back</a> wegwe
+                            {% endfor %}
+                        {% else %}
                         <a href="{{request.META.HTTP_REFERER}}" class="btn btn-secondary">Go Back</a>
+                        {% endif %}
                     </div>
                 
                     

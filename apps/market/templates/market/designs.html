@@ -103,7 +103,14 @@
         </nav>
     <div class="container-fluid">
         <hr>
-
+        {% if messages %}
+            <div class="alert alert-danger" role="alert">
+            {% for message in messages %}
+                <p class="text-monospace small" style="margin-bottom:0px;">{{ forloop.counter }}) {{message}} </p>
+            {% endfor %}
+            </div>
+            <hr>
+        {% endif %}
 
         <div class="row">
                 <div class="container-fluid">

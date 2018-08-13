@@ -17,5 +17,6 @@ urlpatterns = [
     url(r'^portfolio/(?P<user_id>\d+)/sale/(?P<design_id>\d+)$', views.sale),
     url(r'^portfolio/(?P<user_id>\d+)/delete/(?P<design_id>\d+)$', views.delete),
     url(r'add/(?P<design_id>\d+)$', views.add_to_cart),
+    url(r'remove/(?P<design_id>\d+)$', views.remove_from_cart),
     url(r'cart$', views.cart)
 ]
