@@ -31,9 +31,19 @@ def cart(request):
     cart_price = 0
     for id in request.session['cart']:
         design = Design.objects.get(id=id)
-        cart_price += design.price
-        results.append(design)
-
+        if design.paused:
+            messages.error(request, design.name + " has been removed from marketplace, apologies")
+        else:
+            if design.on_sale:
+                discount = design.price * Decimal(.9)
+                design.final_price = Decimal(format(float(discount), '.2f'))
+                cart_price += design.final_price
+                design.save()
+                print(cart_price)
+            else:
+                cart_price += design.price
+            results.append(design)
+    print(cart_price)
     context = {
         'designs': results,
         'cart_total': cart_price
@@ -289,9 +299,11 @@ def sale(request, user_id, design_id):
     design = Design.objects.get(id=design_id)
     if (design.on_sale):
         design.on_sale = False
+        design.final_price = design.price
         design.save()
         return redirect('/portfolio/'+user_id)
     design.on_sale = True
+    design.sale_price
     design.save()    
     return redirect('/portfolio/'+user_id)
 

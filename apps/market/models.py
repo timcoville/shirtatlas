@@ -248,6 +248,7 @@ class DesignManager(models.Manager):
             display_image = static_key,
             design_file = media_key,
             price = postData['price'],
+            final_price = postData['price'],
             licenses = postData['licenses'],
             categories = cats,
             designer = User.objects.get(id=postData['user_id'])
@@ -274,6 +275,7 @@ class Design(models.Model):
     display_image = models.CharField(max_length=100)
     design_file = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=5, decimal_places=2, default=20.00)
+    final_price = models.DecimalField(max_digits=5, decimal_places=2, null=True)
     licenses = models.IntegerField(null=False)
     categories = ArrayField(
         CharField(max_length=30),
@@ -293,6 +295,7 @@ class Design(models.Model):
 
     def sale_price(self):
         discount = self.price * Decimal(.9)
+        
         return format(float(discount), '.2f')
 
     def savings(self):
