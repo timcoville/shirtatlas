@@ -9,7 +9,7 @@ from models import *
 
 
 states = ["AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE",  "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VT", "WA", "WI", "WV", "WY"]
-cats = ["Tattoo", "Bikers", "Characters", "Heraldry",  "Holiday", "Photoshop", "Religious", "Skulls", "Sports", "Typography", "Urban", "Patterns", "Funny", "Artistic", "Comics", "Pop Culture", "Retro", "Sci-Fi", "Gym", "Abstract", "Anime", "Dogs", "Birds", "Cats", "Cool", "Fantasy", "Gaming", "Horror", "Monsters", "Music", "Zombies", "Cars", "Yoga", "Miscellaneous", "Nature", "Geek", "Camping", "Love", "Pregnancy", "Party", "Animals"]
+cats = ["Tattoo", "Bikers", "Characters", "Heraldry",  "Holiday", "Photoshop", "Religious", "Skulls", "Sports", "Typography", "Urban", "Patterns", "Funny", "Artistic", "Comics", "Retro", "Sci-Fi", "Gym", "Abstract", "Anime", "Dogs", "Birds", "Cats", "Cool", "Fantasy", "Gaming", "Horror", "Monsters", "Music", "Zombies", "Cars", "Yoga", "Miscellaneous", "Nature", "Geek", "Camping", "Love", "Pregnancy", "Party", "Animals"]
 
 def index(request):
     context = {
@@ -92,9 +92,8 @@ def remove_from_cart(request, design_id):
     
     return redirect(url)
     
-    
-
-
+def checkout(request):
+    return render(request, "market/checkout.html")
 
 
 def designs(request):
