@@ -21,6 +21,13 @@ def index(request):
         'new_designs': Design.objects.filter(paused = False).exclude(on_sale = True).order_by('-id')[:5],
         'sale_designs': Design.objects.filter(on_sale = True).order_by('-id')[:5],
     }
+
+    designs = Design.objects.raw('SELECT * FROM market_design JOIN market_user ON market_design.id = market_user.id')
+    for design in designs:
+        print(design)
+    print(designs)
+
+
     return render(request, "market/index.html", context)
 
 def index2(request):
@@ -51,6 +58,8 @@ def cart(request):
         
     if len(results) == 0:
         cart_empty = True
+    else:
+        cart_empty = False
     context = {
         'designs': results,
         'cart_total': cart_price,
