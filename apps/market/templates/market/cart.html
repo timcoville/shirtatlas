@@ -182,12 +182,16 @@
                                          </td>
                                          <!-- <td><a href="/checkout"><button  class="btn btn-primary">Checkout</button></a></td> -->
                                          <td>
-                                             <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                                                data-key=""
-                                                data-description="A Django Charge"
-                                                data-amount="{{charge_price}}"
-                                                data-locale="auto">
-                                            </script>
+                                                <form action="/cart" method="post">
+                                                    {% csrf_token %}
+                                                    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                                        data-key=""
+                                                        data-description="ShirtAtlas Purchase"
+                                                        data-amount="{{charge_price}}"
+                                                        data-locale="auto"
+                                                    >
+                                                    </script>
+                                                </form>
                                         </td>
                                      </tr>
                              </tbody>

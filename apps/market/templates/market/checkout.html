@@ -136,6 +136,7 @@
                                 <div class="col"><a href="/cart"><button class="btn btn-primary btn-sm">View Cart</button></a></td></div>
                             </div>
                             <hr>
+                            <form action="/cart" method="post">
                             <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                                 data-key=""
                                 data-description="A Django Charge"
@@ -143,7 +144,8 @@
                                 data-locale="auto"
                                 >
                             </script>
-                            {{charge_price}}
+                            </form>
+                            
                         </div>
                     </div>
                    
