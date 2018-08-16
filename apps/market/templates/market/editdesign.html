@@ -168,6 +168,7 @@
                           <button type="submit" class="btn btn-primary">Update</button>
                         </form>
                         <hr>
+                        <a href="/{{design.id}}"> <button type="button" class="btn btn-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="top" data-content="View your listing on the marketplace." data-trigger="hover">View</button></a>
                         {% if design.paused %}    
                             <a href="/portfolio/{{request.session.user_id}}/pause/{{design.id}}">
                             <button type="button" class="btn btn-secondary btn-sm" data-container="body" data-toggle="popover" data-placement="top" data-content="Unpause to sell again and add to public listings." data-trigger="hover">Unpause</button></a>
