@@ -46,21 +46,24 @@ def cart(request):
             else:
                 cart_price += design.price
             results.append(design)
-        
-    if len(results) == 0:
-        cart_empty = True
+    
+    if request.method != 'POST':
+        if len(results) == 0:
+            cart_empty = True
+        else:
+            cart_empty = False
+        charge_price = cart_price * 100
+        context = {
+            'designs': results,
+            'cart_total': cart_price,
+            'cart_empty': cart_empty,
+            'charge_price': charge_price,
+            'public_key': public_key
+        }
+        return render(request, "market/cart.html", context)
     else:
-        cart_empty = False
-    
-    charge_price = cart_price * 100
-    context = {
-        'designs': results,
-        'cart_total': cart_price,
-        'cart_empty': cart_empty,
-        'charge_price': charge_price
-    }
-    
-    return render(request, "market/cart.html", context)
+        print(request.POST)
+        return redirect('/cart')
 
     
 

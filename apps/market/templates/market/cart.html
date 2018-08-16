@@ -185,7 +185,7 @@
                                                 <form action="/cart" method="post">
                                                     {% csrf_token %}
                                                     <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                                                        data-key=""
+                                                        data-key="{{public_key}}"
                                                         data-description="ShirtAtlas Purchase"
                                                         data-amount="{{charge_price}}"
                                                         data-locale="auto"
