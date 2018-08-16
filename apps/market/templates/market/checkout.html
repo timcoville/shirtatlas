@@ -103,21 +103,50 @@
                     </li> 
                     {% endif %}
                     <li class="nav-item">
-                            <a class="nav-link" href="/cart">Cart ({{request.session.cart | length}})</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Checkout</a>
+                            <a class="nav-link" href="/cart">Checkout ({{request.session.cart | length}})</a>
                     </li>
                     
                     </ul>
             </div>
         </nav>
         <div class="container-fluid">
-                <div class="row">
-                    <div class="col">
-                           
-                    </div>
+                <hr>
+                    {% if messages %}
+                <div class="alert alert-danger" role="alert">
+                {% for message in messages %}
+                    <p class="text-monospace small" style="margin-bottom:0px;">{{ forloop.counter }}) {{message}} </p>
+                {% endfor %}
                 </div>
+                <hr>
+            {% endif %}
+            {% if cart_empty %}
+                <div class="alert alert-info" role="alert">
+                    <p class="text-monospace small" style="margin-bottom:0px;">Your basket is empty, take a look at some of <a href="/designs">our designs.</a></p>
+                </div>
+            {% endif %}
+
+
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <h3>Checkout</h3>
+                            <hr>
+                            <div class="row">
+                                <div class="col">Number of Designs: {{designs | length}}</div>
+                                <div class="col">Cart Total: ${{cart_total}}</div>
+                                <div class="col"><a href="/cart"><button class="btn btn-primary btn-sm">View Cart</button></a></td></div>
+                            </div>
+                            <hr>
+                            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                data-key=""
+                                data-description="A Django Charge"
+                                data-amount="{{charge_price}}"
+                                data-locale="auto"
+                                >
+                            </script>
+                            {{charge_price}}
+                        </div>
+                    </div>
+                   
         <hr>
         <div class="row">
             <div class="col text-center">www.shirtatlas.com</div>

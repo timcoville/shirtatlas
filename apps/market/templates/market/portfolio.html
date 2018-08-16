@@ -103,10 +103,7 @@
                     </li> 
                     {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/cart">Cart ({{request.session.cart | length}})</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Checkout</a>
+                            <a class="nav-link" href="/cart">Checkout ({{request.session.cart | length}})</a>
                     </li>
                     
                     </ul>
@@ -123,13 +120,13 @@
                         <th scope="col">Name</th>
                         <th scope="col">Licenses</th>
                         <th scope="col">Price</th>
-                        <th scope="col">Orders</th>>
+                        <th scope="col">Orders</th>
                         <th scope="col">Actions</th>
                       </tr>
                     </thead>
                     <tbody class="align-middle">
                         {% for design in designs %}
-                            <tr >
+                            <tr>
                                 
                                 <td><div class="test tower"><a href="/{{design.id}}"><img src="{% static design.display_image %}" class="img-thumbnail2"></a></div></td>
                                 <td>{{design.name}}</td>

@@ -114,11 +114,9 @@
                     </li> 
                     {% endif %}
                     <li class="nav-item">
-                            <a class="nav-link" href="/cart">Cart ({{request.session.cart | length}})</a>
+                            <a class="nav-link" href="/cart">Checkout ({{request.session.cart | length}})</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Checkout</a>
-                    </li>
+
                     
                     </ul>
             </div>
@@ -182,7 +180,15 @@
                                          <td>
                                              ${{cart_total}}
                                          </td>
-                                         <td><a href="/checkout"><button  class="btn btn-primary">Checkout</button></a></td>
+                                         <!-- <td><a href="/checkout"><button  class="btn btn-primary">Checkout</button></a></td> -->
+                                         <td>
+                                             <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                                data-key=""
+                                                data-description="A Django Charge"
+                                                data-amount="{{charge_price}}"
+                                                data-locale="auto">
+                                            </script>
+                                        </td>
                                      </tr>
                              </tbody>
                            </table>

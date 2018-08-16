@@ -75,10 +75,7 @@
                     </li> 
                     {% endif %}
                     <li class="nav-item">
-                            <a class="nav-link" href="/cart">Cart ({{request.session.cart | length}})</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Checkout</a>
+                            <a class="nav-link" href="/cart">Checkout ({{request.session.cart | length}})</a>
                     </li>
                     
                     </ul>
@@ -114,7 +111,7 @@
                               <h6 class="card-title">Licenses Available: {{design.licenses}}</h6>
                               <hr>
                               {% if design.designer.id == request.session.user_id %}
-                              <div class="alert alert-info" role="alert">Buy button is disabled, shoppers will not be able to view the edit or performance links</div>
+                              <div class="alert alert-info" role="alert">Buy button is disabled, shoppers will not be able to edit or view sales.</div>
                               <button class="btn btn-warning">Buy</button> 
                               {% else %}
                                 {% if design.id in request.session.cart %}
@@ -144,18 +141,20 @@
                             
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title h4">{{design.name}} Sales Performance</h4>
+                                    <h5 class="modal-title h4">Sales Performance</h5>
+                                        
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">×</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                   <table class="table">
+                                    <h6>{{design.name}} </h6>
+                                   <table class="table table-bordered table-dark">
                                        <thead>
                                         <tr>
-                                            <td>Order</td>
-                                            <td>Sales</td>
-                                            <td>Price</td>
+                                            <td>Order Date</td>
+                                            <td>License #</td>
+                                            <td>Final Price</td>
                                         </tr>
                                         </thead>
                                    </table>

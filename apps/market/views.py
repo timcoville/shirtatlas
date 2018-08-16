@@ -8,6 +8,7 @@ import os
 import stripe
 
 stripe.api_key = os.environ.get('STRIPE_PRIVATE_KEY')
+public_key = os.environ.get('STRIPE_PUBLIC_KEY')
 
 
 
@@ -22,18 +23,8 @@ def index(request):
         'sale_designs': Design.objects.filter(on_sale = True).order_by('-id')[:5],
     }
 
-    designs = Design.objects.raw('SELECT * FROM market_design JOIN market_user ON market_design.id = market_user.id')
-    for design in designs:
-        print(design)
-    print(designs)
-
-
     return render(request, "market/index.html", context)
 
-def index2(request):
-    query = request.GET.get('name')
-    print(query)
-    return render(request, "market/index.html")
 
 
 def cart(request):
@@ -60,12 +51,58 @@ def cart(request):
         cart_empty = True
     else:
         cart_empty = False
+    
+    charge_price = cart_price * 100
     context = {
         'designs': results,
         'cart_total': cart_price,
-        'cart_empty': cart_empty
+        'cart_empty': cart_empty,
+        'charge_price': charge_price
     }
+    
     return render(request, "market/cart.html", context)
+
+def checkout(request):
+    if not 'user_id' in request.session:
+        messages.error(request, "Please register first to checkout")
+        return redirect('/register')
+    if request.method != "POST":
+        if not 'cart' in request.session:
+            request.session['cart'] = []
+        results = []
+        cart_price = 0
+        for id in request.session['cart']:
+            design = Design.objects.get(id=id)
+            if design.paused:
+                messages.error(request, design.name + " has been removed from marketplace, apologies")
+            else:
+                if design.on_sale:
+                    discount = design.price * Decimal(.9)
+                    design.final_price = Decimal(format(float(discount), '.2f'))
+                    cart_price += design.final_price
+                    design.save()
+                    print(cart_price)
+                else:
+                    cart_price += design.price
+                results.append(design)
+            
+        if len(results) == 0:
+            cart_empty = True
+        else:
+            cart_empty = False
+        
+        charge_price = cart_price * 100
+        context = {
+            'designs': results,
+            'cart_total': cart_price,
+            'cart_empty': cart_empty,
+            'charge_price': charge_price,
+            'public_key': public_key
+        }
+        return render(request, "market/checkout.html", context)
+    
+
+
 
 def add_to_cart(request, design_id):
     if 'backURL' in request.POST:
@@ -109,9 +146,6 @@ def remove_from_cart(request, design_id):
     
     return redirect(url)
     
-def checkout(request):
-    return render(request, "market/checkout.html")
-
 
 def designs(request):
     category = request.GET.get('cat')
