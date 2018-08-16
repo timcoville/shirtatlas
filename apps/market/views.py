@@ -33,6 +33,7 @@ def cart(request):
     if not 'cart' in request.session:
         request.session['cart'] = []
     results = []
+    prices = []
     cart_price = 0
     for id in request.session['cart']:
         design = Design.objects.get(id=id)
@@ -44,17 +45,18 @@ def cart(request):
                 design.final_price = Decimal(format(float(discount), '.2f'))
                 cart_price += design.final_price
                 design.save()
-                print(cart_price)
+                prices.append(design.final_price)
             else:
                 cart_price += design.price
+                prices.append(design.price)
             results.append(design)
-    
+    print(prices)
     if request.method != 'POST':
         if len(results) == 0:
             cart_empty = True
         else:
             cart_empty = False
-        charge_price = cart_price * 100
+        charge_price = int(cart_price * 100)
         context = {
             'designs': results,
             'cart_total': cart_price,
@@ -64,9 +66,26 @@ def cart(request):
         }
         return render(request, "market/cart.html", context)
     else:
-
-
-        print(request.POST)
+        try: 
+            charge = stripe.Charge.create(
+                amount=int(cart_price * 100),
+                currency="usd",
+                source=request.POST['stripeToken'],
+                description="Design license(s) purchases with Shirt Atlas"
+            )
+        except stripe.error.CardError as ce:
+            messages.error(request, "Failure to process your credit card, please try again")
+            return redirect('/cart')
+        
+        new_order = Order.objects.create(buyer=User.objects.get(id = request.session['user_id']), order_cost = cart_price, charge_id = charge.id)
+        for design in results:
+            if design.on_sale:
+                OrderDetails.objects.create(charged_price = design.final_price, design = design, order = new_order)
+            else:
+                OrderDetails.objects.create(charged_price = design.price, design = design, order = new_order)
+            design.licenses -= 1
+            design.sales += 1
+            design.save()  
         return redirect('/cart')
 
     
