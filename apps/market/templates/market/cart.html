@@ -182,16 +182,21 @@
                                          </td>
                                          <!-- <td><a href="/checkout"><button  class="btn btn-primary">Checkout</button></a></td> -->
                                          <td>
+                                             {% if 'user_id' in request.session %}
                                                 <form action="/cart" method="post">
                                                     {% csrf_token %}
                                                     <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                                                         data-key="{{public_key}}"
-                                                        data-description="ShirtAtlas Purchase"
+                                                        data-description="ShirtAtlas"
                                                         data-amount="{{charge_price}}"
                                                         data-locale="auto"
                                                     >
                                                     </script>
                                                 </form>
+                                            {% else %}
+                                                <a href="/register"><button type="button" class="btn btn-secondary btn-sm">Register</button></a>
+                                                <a href="/login"><button type="button" class="btn btn-secondary btn-sm">Login</button></a>
+                                            {% endif %}
                                         </td>
                                      </tr>
                              </tbody>

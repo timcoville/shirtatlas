@@ -28,6 +28,8 @@ def index(request):
 
 
 def cart(request):
+    if not 'user_id' in request.session:
+        messages.error(request, "Please login or register to checkout")        
     if not 'cart' in request.session:
         request.session['cart'] = []
     results = []
@@ -62,6 +64,8 @@ def cart(request):
         }
         return render(request, "market/cart.html", context)
     else:
+
+
         print(request.POST)
         return redirect('/cart')
 
