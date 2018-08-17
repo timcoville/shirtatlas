@@ -85,10 +85,12 @@ def cart(request):
                 OrderDetails.objects.create(charged_price = design.price, design = design, order = new_order)
             design.licenses -= 1
             design.sales += 1
-            design.save()  
-        return redirect('/cart')
+            design.save()
+        request.session['cart'] = []
+        return redirect('/success')
 
-    
+def success(request):
+    return render(request, 'market/success.html')
 
 
 
