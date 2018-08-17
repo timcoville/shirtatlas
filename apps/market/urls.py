@@ -19,5 +19,7 @@ urlpatterns = [
     url(r'add/(?P<design_id>\d+)$', views.add_to_cart),
     url(r'remove/(?P<design_id>\d+)$', views.remove_from_cart),
     url(r'cart$', views.cart),
-    url(r'success$', views.success)
+    url(r'success$', views.success),
+    url(r'vieworders$', views.view_orders),
+    url(r'vieworders/(?P<order_id>\d+)/(?P<user_id>\d+)$', views.order_details)
 ]

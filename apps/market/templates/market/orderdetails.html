@@ -16,6 +16,48 @@
     .black-opacity:hover{
         background-color:rgba(0, 0, 0, 0.5);
     }
+
+    #cat-list li {
+        padding: 5px;
+        font-size:.8em;
+    }
+
+    .table {
+        border-radius: 5px;
+    }
+    .table > thead > tr > th {
+        border-top: 0px !important;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .table > tbody > tr > td  {
+     vertical-align: middle;
+     text-align: center;
+    }
+
+    .oldprice {
+        text-decoration: line-through;
+    }
+
+    .test {
+        overflow: hidden;
+        max-width: 135px;
+        height: auto;
+        margin: 0 auto;
+        background-color: #fff;
+        border: 3px solid #dee2e6;
+        border-radius: .25rem;
+    }
+
+    .tower {
+    width: 135px;
+    height: 135px;
+    }
+
+    .img-thumbnail2 {
+        max-width: 100%;
+        height: auto;
+    }
     </style>
 </head>
 <body>
@@ -70,36 +112,46 @@
     <div class="container-fluid">
         <hr>
           <div class="row justify-content-center">
-            <div class="col-md-8">
-              <h3>Login</h3>
-              <hr>
-              {% if messages %}
-              <div class="alert alert-danger" role="alert">                
-                {% for message in messages %}
-                  <span class="text-monospace small"> {{message}}</span>
-                {% endfor %}
-              </div>
-              <hr>
-              {% endif %}
-              <form action="/login" method="post">
-                {% csrf_token %}
-                  <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="inputEmail">Email</label>
-                        <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Email">
-                      </div>
-                    <div class="form-group col-md-6">
-                        <label for="inputPassword">Password</label>
-                        <input type="password" class="form-control" id="inputPassword" name="password" placeholder="Password">
-                      </div>
-                  </div>
-                  
-    
-                  <button type="submit" class="btn btn-primary">Login</button>
-                </form>
-            
+            <div class="col"><div class="float-right"><a href="/vieworders"><button class="btn btn-secondary">Go Back</button></a></div>
+                <h2>Order #{{order_id}} </h2> 
+                
+                
+                <hr>
+                <table class="table table-hover table-light">
+                        <thead>
+                          <tr>
+                            <th scope="col">License #</th>
+                            <th scope="col">Design</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Cost</th>
+                            <th scope="col">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody class="align-middle">
+                            {% for order in orders %}
+                                <tr >
+                                    <td>{{order.id}}</td>
+                                    <td><div class="test tower"><a href="/{{order.design.id}}"><img src="{% static order.design.display_image %}" class="img-thumbnail2"></a></div></td>
+                                    <td>{{order.design.name}}</td>
+                                    <td>{{order.design.desc}}</td>
+                                    <td>{{order.charged_price}}</td> 
+
+                                    
+                                    
+                                    <td>    
+                                            <a href="/{{order.design.id}}"><button type="button" class="btn btn-secondary btn-sm">View</button></a>
+                                            
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                                
+                        </tbody>
+                      </table>
             </div>
+            
           </div>
+          
         <hr>
         <div class="row">
             <div class="col text-center">www.shirtatlas.com</div>

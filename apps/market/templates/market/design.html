@@ -33,7 +33,7 @@
     </style>
 </head>
 <body>
- 
+ <!-- Navigation Bar -->
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
             <a class="navbar-brand" href="#"> <img src="{% static 'ShirtAtlas.gif' %}" height="50" alt=""></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,7 @@
                                     <a class="dropdown-item" href="/portfolio/{{request.session.user_id}}">My Portfolio</a>
                                 {% endif%}
                                 <a class="dropdown-item" href="/editprofile">Edit Account</a>
-                                <a class="dropdown-item" href="">View Orders</a>
+                                <a class="dropdown-item" href="/vieworders">View Orders</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="/logout">Logout</a>
                             </div>
@@ -82,60 +82,57 @@
             </div>
         </nav>
         <hr>
+        {{HTTP_REFERER}}
     <div class="container-fluid">
-       
        <div class="row">
-            
-                
-                        
                     <div class="col-sm-4">
                         <img src="{% static design.display_image %}" class="img-thumbnail">
                     </div>
 
-                    <div class="col-sm-8">
-                            
-                            {% if design.paused and design.designer.id == request.session.user_id %}
+                    <div class="col-sm-8">                            
+                        {% if design.paused and design.designer.id == request.session.user_id %}
                             <div class="alert alert-warning" role="alert">
                                     Your design is currently paused and hidden, <a href="/portfolio/{{request.session.user_id}}">update</a> your listing to make public!
                             </div>
-                            {% endif %}
+                        {% endif %}
                         <div class="card">
                             <h5 class="card-header">{{design.name}}</h5>
                             <div class="card-body">
                                 {% if design.on_sale %}
-                                <h5 class="card-title"><span class="oldprice">${{design.price}}</span> <b>${{design.sale_price}}</b></h5>
+                                    <h5 class="card-title"><span class="oldprice">${{design.price}}</span> <b>${{design.sale_price}}</b></h5>
                                 {% else %}
-                                <h5 class="card-title">${{design.price}}</h5>
+                                    <h5 class="card-title">${{design.price}}</h5>
                                 {% endif %}
-                              <p class="card-text">{{design.desc}}</p>
-                              <h6 class="card-title">Licenses Available: {{design.licenses}}</h6>
-                              <hr>
-                              {% if design.designer.id == request.session.user_id %}
-                              <div class="alert alert-info" role="alert">Buy button is disabled, shoppers will not be able to edit or view sales.</div>
-                              <button class="btn btn-warning">Buy</button> 
-                              {% else %}
-                                {% if design.id in request.session.cart %}
-                                <a href="/checkout" class="btn btn-primary btn-sm">Checkout</a> 
-                                <form action="/remove/{{design.id}}" method="POST">{% csrf_token %}<input type="hidden" name="refURL" value="{{request.path}}?{{request.META.QUERY_STRING}}"><input type="hidden" name="backURL" value="{{request.META.HTTP_REFERER}}"><button class="btn btn-secondary btn-sm">Remove from Cart</button> </form> 
+                                <p class="card-text">{{design.desc}}</p>
+                                <h6 class="card-title">Licenses Available: {{design.licenses}}</h6>
+                                <hr>
+                                {% if design.designer.id == request.session.user_id %}
+                                    <div class="alert alert-info" role="alert">Buy button is disabled, shoppers will not be able to edit or view sales.</div>
+                                    <button class="btn btn-warning">Buy</button> 
                                 {% else %}
-                                <form action="/add/{{design.id}}" method="POST">{% csrf_token %}<input type="hidden" name="refURL" value="{{request.path}}?{{request.META.QUERY_STRING}}"><input type="hidden" name="backURL" value="{{request.META.HTTP_REFERER}}"><button class="btn btn-warning btn-sm">Buy</button> </form> 
-                                {% endif %}
+                                    {% if design.id in request.session.cart %}
+                                        <a href="/cart" class="btn btn-primary btn-sm">Checkout</a> 
+                                        <form action="/remove/{{design.id}}" method="POST">{% csrf_token %}<input type="hidden" name="refURL" value="{{request.path}}?{{request.META.QUERY_STRING}}"><input type="hidden" name="backURL" value="{{request.META.HTTP_REFERER}}"><button class="btn btn-secondary btn-sm">Remove from Cart</button> </form> 
+                                    {% else %}
+                                        <form action="/add/{{design.id}}" method="POST">{% csrf_token %}<input type="hidden" name="refURL" value="{{request.path}}?{{request.META.QUERY_STRING}}"><input type="hidden" name="backURL" value="{{request.META.HTTP_REFERER}}"><button class="btn btn-warning btn-sm">Buy</button> </form> 
+                                    {% endif %}
                               {% endif %}
                             </div>
                         </div>
                         <br>
-                        {% if messages %}
-                            {% for message in messages %}
-                                <a href="{{message}}" class="btn btn-secondary">Go Back</a>
-                            {% endfor %}
-                        {% else %}
-                        <a href="{{request.META.HTTP_REFERER}}" class="btn btn-secondary">Go Back</a>
-                        {% endif %}
-                        {% if design.designer.id == request.session.user_id %}
-                        <div class="float-right"><a href="/portfolio/{{request.session.user_id}}/edit/{{design.id}}" class="btn btn-secondary">Edit Design</a> <a href="/portfolio/{{request.session.user_id}}/performance/{{design.id}}" class="btn btn-secondary" data-toggle="modal" data-target=".bd-example-modal-lg">View Sales</a></div> 
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <a href="{{message}}" class="btn btn-secondary">Go Back</a>
+                                {% endfor %}
+                            {% else %}
+                                <a href="{{request.META.HTTP_REFERER}}" class="btn btn-secondary">Go Back</a>
+                            {% endif %}
+                            {% if design.designer.id == request.session.user_id %}
+                            <div class="float-right">
+                                <a href="/portfolio/{{request.session.user_id}}/edit/{{design.id}}" class="btn btn-secondary">Edit Design</a>
+                                <a href="/portfolio/{{request.session.user_id}}/performance/{{design.id}}" class="btn btn-secondary" data-toggle="modal" data-target=".bd-example-modal-lg">View Sales</a>
+                            </div> 
                     </div>
-                    <div class="col">
-
 
                     <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
@@ -162,13 +159,9 @@
                                 </div>
                             </div>
                         </div>
-                        </div>
-                      {% endif %}  
                     </div>
-                    
-                    
-                
-
+                      {% endif %}  
+            </div>
        </div>
        
 

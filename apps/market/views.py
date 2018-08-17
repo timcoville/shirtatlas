@@ -92,6 +92,32 @@ def cart(request):
 def success(request):
     return render(request, 'market/success.html')
 
+def view_orders(request):
+    if not 'user_id' in request.session:
+        return redirect('/')
+    user = User.objects.get(id = request.session['user_id'])
+    results = Order.objects.filter(buyer_id = user.id)
+    context = {
+        'orders': results,
+        'user': user
+    }
+    return render(request, 'market/vieworders.html', context)
+
+def order_details(request, order_id, user_id):
+    if not 'user_id' in request.session:
+        return redirect('/')
+    if request.session['user_id'] != int(user_id):
+        return redirect('/vieworders')
+    orders = OrderDetails.objects.filter(order_id = order_id).prefetch_related()
+    
+
+    context = {
+        'orders': orders,
+        'order_id': order_id
+        
+    }
+    return render(request, "market/orderdetails.html", context)
+
 
 
 def add_to_cart(request, design_id):
@@ -118,6 +144,7 @@ def add_to_cart(request, design_id):
         return redirect(url)
 
 def remove_from_cart(request, design_id):
+    print(request.META['HTTP_REFERER'])
     if 'backURL' in request.POST:
         messages.info(request, request.POST['backURL'])
 
@@ -262,10 +289,11 @@ def newdesign(request):
 
 def design(request, id):
     design = Design.objects.get(id=id)
-
+    HTTP_REFERER = request.META['HTTP_REFERER']
     context = {
         'design': design,
-        'cats': cats
+        'cats': cats,
+        'HTTP_REFERER': HTTP_REFERER
         }
     return render(request, "market/design.html", context)
 
