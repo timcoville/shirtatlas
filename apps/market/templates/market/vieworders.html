@@ -75,7 +75,6 @@
                 <table class="table table-hover table-light">
                         <thead>
                           <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Date</th>
                             <th scope="col">Order #</th>
                             <th scope="col">Total Amount</th>
@@ -85,8 +84,7 @@
                         <tbody class="align-middle">
                             {% for order in orders %}
                                 <tr>
-                                    <td>{{forloop.counter}}</td>
-                                    <td>{{order.created_at}}</td>    
+                                    <td>{{order.created_at | date:'M-d-Y'}}</td>    
                                     <td>{{order.id}}</td>
                                     <td>${{order.order_cost}}</td>
                                     <td><a href="/vieworders/{{order.id}}/{{request.session.user_id}}"><button class="btn btn-primary">Order Details</button></a></td>
