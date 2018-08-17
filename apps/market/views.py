@@ -11,9 +11,6 @@ stripe.api_key = os.environ.get('STRIPE_PRIVATE_KEY')
 public_key = os.environ.get('STRIPE_PUBLIC_KEY')
 
 
-
-
-
 states = ["AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE",  "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VT", "WA", "WI", "WV", "WY"]
 cats = ["Tattoo", "Bikers", "Characters", "Heraldry",  "Holiday", "Photoshop", "Religious", "Skulls", "Sports", "Typography", "Urban", "Patterns", "Funny", "Artistic", "Comics", "Retro", "Sci-Fi", "Gym", "Abstract", "Anime", "Dogs", "Birds", "Cats", "Cool", "Fantasy", "Gaming", "Horror", "Monsters", "Music", "Zombies", "Cars", "Yoga", "Miscellaneous", "Nature", "Geek", "Camping", "Love", "Pregnancy", "Party", "Animals"]
 
@@ -24,8 +21,6 @@ def index(request):
     }
 
     return render(request, "market/index.html", context)
-
-
 
 def cart(request):
     if not 'user_id' in request.session:
@@ -50,7 +45,6 @@ def cart(request):
                 cart_price += design.price
                 prices.append(design.price)
             results.append(design)
-    print(prices)
     if request.method != 'POST':
         if len(results) == 0:
             cart_empty = True
@@ -109,8 +103,6 @@ def order_details(request, order_id, user_id):
     if request.session['user_id'] != int(user_id):
         return redirect('/vieworders')
     orders = OrderDetails.objects.filter(order_id = order_id).prefetch_related()
-    
-
     context = {
         'orders': orders,
         'order_id': order_id
@@ -118,8 +110,6 @@ def order_details(request, order_id, user_id):
     }
     return render(request, "market/orderdetails.html", context)
 
-def test(request):
-    return render(request, "market/test2.html")
 
 def add_to_cart(request, design_id):
     if 'backURL' in request.POST:
@@ -148,7 +138,6 @@ def remove_from_cart(request, design_id):
     print(request.META['HTTP_REFERER'])
     if 'backURL' in request.POST:
         messages.info(request, request.POST['backURL'])
-
     url = request.POST['refURL']
     if url[len(url)-1] == '?':
         url = url.replace('?',"")
@@ -157,22 +146,15 @@ def remove_from_cart(request, design_id):
         print('working')
         url = request.POST['refURL']
         return redirect(url)
-
     del cart[cart.index(int(design_id))]
     request.session['cart'] = cart
-    
-    
     return redirect(url)
     
 
 def designs(request):
     category = request.GET.get('cat')
-    
-    
     if category != None and ' ' in category:
         category = category.split(' ')
-        
-
     if category != None:
         if type(category) == list:
             results = Design.objects.filter(categories__overlap = category)
@@ -290,11 +272,16 @@ def newdesign(request):
 
 def design(request, id):
     design = Design.objects.get(id=id)
-    HTTP_REFERER = request.META['HTTP_REFERER']
+    sales = OrderDetails.objects.filter(design_id=id)
+    revenue = 0
+    for sale in sales:
+        revenue += sale.charged_price
+    print(revenue)
     context = {
         'design': design,
         'cats': cats,
-        'HTTP_REFERER': HTTP_REFERER
+        'sales': sales,
+        'revenue': revenue
         }
     return render(request, "market/design.html", context)
 

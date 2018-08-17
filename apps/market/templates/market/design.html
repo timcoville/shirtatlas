@@ -63,8 +63,7 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <h6>{{design.name}} </h6>
-                                   <table class="table table-bordered table-dark">
+                                   <table class="table table-bordered table-dark table-hover">
                                        <thead>
                                         <tr>
                                             <td>Order Date</td>
@@ -72,6 +71,19 @@
                                             <td>Final Price</td>
                                         </tr>
                                         </thead>
+                                        <tbody>
+                                            {% for sale in sales %}
+                                            <tr>
+                                                <td>{{sale.created_at | date:'M-d-Y'}}</td>
+                                                <td>{{sale.id}}</td>
+                                                <td>${{sale.charged_price}}</td>
+                                            </tr>
+                                            {% endfor %}
+                                            <tr>
+                                                <td colspan="2 align-left">Total Revenue:</td>
+                                                <td>${{revenue}}</td>
+                                            </tr>
+                                        </tbody>
                                    </table>
                                 </div>
                             </div>

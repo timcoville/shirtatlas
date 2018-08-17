@@ -21,6 +21,5 @@ urlpatterns = [
     url(r'cart$', views.cart),
     url(r'success$', views.success),
     url(r'vieworders$', views.view_orders),
-    url(r'vieworders/(?P<order_id>\d+)/(?P<user_id>\d+)$', views.order_details),
-    url(r'test$', views.test)
+    url(r'vieworders/(?P<order_id>\d+)/(?P<user_id>\d+)$', views.order_details)
 ]
