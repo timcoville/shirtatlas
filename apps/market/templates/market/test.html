@@ -9,6 +9,101 @@
      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
     <title>ShirtAtlas</title>
 </head>
+<style>
+    .black-opacity{
+        background-color:rgba(0, 0, 0, 0.4);
+    }
+    .black-opacity:hover{
+        background-color:rgba(0, 0, 0, 0.5);
+    }
+    .test {
+        overflow: hidden;
+        max-width: 100%;
+        height: auto;
+        margin: 0 auto;
+        background-color: #fff;
+        border: 3px solid #dee2e6;
+        border-radius: .25rem;
+    }
+
+    #cat-list li {
+        padding: 5px;
+        font-size:.8em;
+    }
+
+    .tower {
+    width: 100%;
+    height: 500px;
+    }
+
+    .img-thumbnail2 {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .oldprice {
+        text-decoration: line-through;
+    }
+    .inline-block {
+        display:inline-block;
+    }
+    .black-opacity{
+        background-color:rgba(0, 0, 0, 0.4);
+    }
+    .black-opacity:hover{
+        background-color:rgba(0, 0, 0, 0.5);
+    }
+
+    #cat-list li {
+        padding: 5px;
+        font-size:.8em;
+    }
+
+    .table {
+        border-radius: 5px;
+    }
+    .table > thead > tr > th {
+        border-top: 0px !important;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .table > tbody > tr > td  {
+     vertical-align: middle;
+     text-align: center;
+    }
+
+    .oldprice {
+        text-decoration: line-through;
+    }
+
+    .test {
+        overflow: hidden;
+        max-width: 135px;
+        height: auto;
+        margin: 0 auto;
+        background-color: #fff;
+        border: 3px solid #dee2e6;
+        border-radius: .25rem;
+    }
+
+    .reduce {
+        font-size: .6em;
+    }
+
+    .tower {
+    width: 135px;
+    height: 135px;
+    }
+
+    .img-thumbnail2 {
+        max-width: 100%;
+        height: auto;
+    }
+    .oldprice {
+        text-decoration: line-through;
+    }
+
+</style>
 <body>
 
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
@@ -77,6 +172,93 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
-    
+    <script>
+        $(document).ready(function(){
+            
+            
+
+
+            $(document.body).on('click', '#test123', function(){
+                var string = $(this).html()
+                var url = location.href
+                page = false     
+                if (url.indexOf('page') > -1){
+                    page = url.slice(url.indexOf('page')-1)
+                    url = url.slice(0,url.indexOf('page')-1)
+                    page = page.slice(1)
+                }
+                
+                
+
+
+                var tempArray = url.split("?");
+                var baseURL = tempArray[0];
+                var additionalURL = tempArray[1];
+
+
+                //breaking down old query params for tags
+                if (additionalURL){
+                    var tmpAnchor = additionalURL.split("=");
+                    var TheKey = tmpAnchor[0];
+                        TheVals = tmpAnchor[1];
+                    if (TheVals.indexOf('+') > -1){
+                        valList = TheVals.split("+")
+                    } else {
+                        valList = [TheVals]
+                    }
+                    console.log(valList)
+                } else {
+                    TheKey = "cat"
+                    valList = []
+                }
+
+                if(string != "All"){
+                    //adding or removing query params for tags
+                    if (valList.indexOf(string) > -1){
+                        console.log(valList.indexOf(string))
+                        valList.splice(valList.indexOf(string), 1)
+                        console.log(valList)
+                    } else {
+                        valList.push(string)
+                        console.log(valList)
+                    }
+                    
+                    //rebuilding url with new params
+                    if (valList.length > 0){
+                        newQuery = "?" + TheKey + "=" + valList[0]
+                        for(var x=1; x < valList.length; x++){
+                            newQuery += "+" + valList[x]
+                        }
+                        console.log(newQuery)
+                        console.log(baseURL + newQuery)    
+                        newURL = baseURL + newQuery
+                        if (page){
+                            newURL += "&" + page
+                        }
+                        document.location = newURL
+                    } else {
+                        document.location = baseURL
+                    }
+                } else {
+                    document.location = baseURL
+                }
+                    
+
+
+
+
+
+
+
+            })
+                
+            
+        })
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+    </script>
 </body>
 </html>
