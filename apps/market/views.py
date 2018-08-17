@@ -118,7 +118,8 @@ def order_details(request, order_id, user_id):
     }
     return render(request, "market/orderdetails.html", context)
 
-
+def test(request):
+    return render(request, "market/test2.html")
 
 def add_to_cart(request, design_id):
     if 'backURL' in request.POST:
