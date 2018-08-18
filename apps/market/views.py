@@ -17,7 +17,7 @@ cats = ["Tattoo", "Bikers", "Characters", "Heraldry",  "Holiday", "Photoshop", "
 def index(request):
     context = {
         'new_designs': Design.objects.filter(paused = False).exclude(on_sale = True).order_by('-id')[:5],
-        'sale_designs': Design.objects.filter(on_sale = True).order_by('-id')[:5],
+        'sale_designs': Design.objects.filter(on_sale = True).exclude(paused=True).order_by('-id')[:5],
     }
 
     return render(request, "market/index.html", context)
@@ -157,9 +157,9 @@ def designs(request):
         category = category.split(' ')
     if category != None:
         if type(category) == list:
-            results = Design.objects.filter(categories__overlap = category)
+            results = Design.objects.filter(categories__overlap = category).exclude(paused=True)
         else:
-            results = Design.objects.filter(categories__contains = [category])
+            results = Design.objects.filter(categories__contains = [category]).exclude(paused=True)
     else:
         results = Design.objects.all()
     print(results)
@@ -229,7 +229,10 @@ def editprofile(request):
     if not 'user_id' in request.session:
         return redirect('/')
     if request.method != 'POST':
-        context = {"user": User.objects.get(id = request.session['user_id'])}
+        context = {
+            "user": User.objects.get(id = request.session['user_id']),
+            "states": states
+            }
         return render(request, "market/edit.html", context)
     result = User.objects.update_profile(request.POST)
     if "errors" in result:

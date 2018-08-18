@@ -46,7 +46,9 @@
                       <select id="inputState" name="state" class="form-control">
                         <option selected>{{user.state}}</option>
                         {% for st in states %}
-                        <option>{{st}}</option>
+                          {% if st != user.state%}
+                            <option>{{st}}</option>
+                          {% endif %}
                         {% endfor %}
                       </select>
                     </div>
