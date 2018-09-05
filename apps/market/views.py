@@ -19,7 +19,6 @@ def index(request):
         'new_designs': Design.objects.filter(paused = False).exclude(on_sale = True).order_by('-id')[:5],
         'sale_designs': Design.objects.filter(on_sale = True).exclude(paused=True).order_by('-id')[:5],
     }
-
     return render(request, "market/index.html", context)
 
 def cart(request):
