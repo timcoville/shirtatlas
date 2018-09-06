@@ -365,6 +365,9 @@ def sale(request, user_id, design_id):
     design.save()    
     return redirect('/portfolio/'+user_id)
 
+def apply(request):
+    return render(request, 'market/apply.html')
+    
 def logout(request):
     request.session.clear()
     return redirect('/')
