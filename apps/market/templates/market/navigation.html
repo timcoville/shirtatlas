@@ -37,6 +37,8 @@
                             {% if 'designer' in request.session %}
                                 <a class="dropdown-item" href="/newdesign">Add Design</a>
                                 <a class="dropdown-item" href="/portfolio/{{request.session.user_id}}">My Portfolio</a>
+                            {% else %}
+                                <a class="dropdown-item" href="/apply">Designer Application</a>
                             {% endif%}
                             <a class="dropdown-item" href="/editprofile">Edit Account</a>
                             <a class="dropdown-item" href="/vieworders">View Orders</a>
