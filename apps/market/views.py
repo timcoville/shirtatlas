@@ -70,7 +70,7 @@ def cart(request):
             messages.error(request, "Failure to process your credit card, please try again")
             return redirect('/cart')
         
-        new_order = Order.objects.create(buyer=User.objects.get(id = request.session['user_id']), order_cost = cart_price, charge_id = charge.id)
+        new_order = Order.objects.create(token_id=request.POST['stripeToken'], buyer=User.objects.get(id = request.session['user_id']), order_cost = cart_price, charge_id = charge.id)
         for design in results:
             if design.on_sale:
                 OrderDetails.objects.create(charged_price = design.final_price, design = design, order = new_order)
@@ -367,7 +367,7 @@ def sale(request, user_id, design_id):
 
 def apply(request):
     return render(request, 'market/apply.html')
-    
+
 def logout(request):
     request.session.clear()
     return redirect('/')

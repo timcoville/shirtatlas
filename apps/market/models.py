@@ -312,6 +312,7 @@ class Order(models.Model):
 
 
 class OrderDetails(models.Model):
+    token_id = models.IntegerField(default=0)
     charged_price = models.DecimalField(max_digits=5, decimal_places=2, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
